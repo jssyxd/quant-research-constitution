@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>americaStocks 量化项目多智能体研发完整复盘与工业级 SOP 白皮书</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        darkMode: true,
+        background: '#090d14',
+        mainBkg: '#1e293b',
+        primaryColor: '#1e293b',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#38bdf8',
+        lineColor: '#38bdf8',
+        secondaryColor: '#0f172a',
+        tertiaryColor: '#1e293b',
+        nodeBorder: '#38bdf8',
+        clusterBkg: 'rgba(56, 189, 248, 0.05)',
+        clusterBorder: '#334155',
+        actorBkg: '#1e293b',
+        actorBorder: '#38bdf8',
+        actorTextColor: '#f8fafc',
+        actorLineColor: '#38bdf8',
+        signalColor: '#38bdf8',
+        signalTextColor: '#f8fafc',
+        labelBoxBkgColor: '#1e293b',
+        labelBoxBorderColor: '#38bdf8',
+        labelTextColor: '#f8fafc',
+        loopTextColor: '#f8fafc',
+        noteBorderColor: '#38bdf8',
+        noteBkgColor: '#1e293b',
+        noteTextColor: '#f8fafc'
+      }
+    });
+  </script>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card-bg: #131a26;
+      --card-border: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-red: #f87171;
+      --accent-purple: #c084fc;
+      --code-bg: #090d14;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.65;
+      padding: 40px 24px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 32px;
+      margin-bottom: 40px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .meta-item {
+      background: var(--card-bg);
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+    .meta-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .meta-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 36px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: var(--accent-blue);
+    }
+    p {
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 16px;
+      color: #cbd5e1;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+    th {
+      background: #0f1520;
+      color: var(--accent-blue);
+      padding: 14px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--card-border);
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .diagram-box {
+      background: #090d14;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 24px 0;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+    .diagram-box .mermaid {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .diagram-box svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 18px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent-blue);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+    }
+    .callout-title {
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .callout.danger {
+      border-left-color: var(--accent-red);
+      background: rgba(248, 113, 113, 0.08);
+    }
+    .callout.danger .callout-title {
+      color: var(--accent-red);
+    }
+    .callout.success {
+      border-left-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.08);
+    }
+    .callout.success .callout-title {
+      color: var(--accent-green);
+    }
+
+    .step-card {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      color: #f8fafc;
+    }
+    .step-num {
+      background: var(--accent-blue);
+      color: #0b0f17;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Institutional Quant Post-Mortem & SOP Whitepaper</div>
+      <h1>americaStocks 量化项目多智能体研发完整复盘</h1>
+      <p class="subtitle">基于 Herdr Swarm、Microsoft RD-Agent 架构、Qlib 因子挖掘、NautilusTrader 纳秒级撮合与 Credal 反过拟合审计</p>
+      
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="meta-label">总调度框架</div>
+          <div class="meta-value">Herdr (8 Panes / Worktrees)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">核心回测框架</div>
+          <div class="meta-value">NautilusTrader (v1.227.0)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">反过拟合审计</div>
+          <div class="meta-value">Credal Transformer / WFO</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">最终收敛状态</div>
+          <div class="meta-value" style="color: var(--accent-green);">协议结论 2 (通过检验并实盘)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 问题 1 -->
+    <section id="question-1">
+      <h2>📌 一、问题 1：Herdr 总调度下实际调用的 Agent 角色与具体交互</h2>
+      <p>在研发和实盘全流程中，主控 Agent（Captain: 运行于主窗格的 <code>omp</code>）通过 <code>herdr-dispatch</code> 与 Herdr CLI，共行使了 <strong>8 个独立的 Worker Agent Pane</strong>，每个 Worker 在独立的 Git Worktree 目录下运行，通过标准化接口协议（Input Contract / Output Deliverable）进行状态机式交互。</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent 标识</th>
+              <th>承载 Kind</th>
+              <th>角色定义 (Role)</th>
+              <th>核心分工与职责</th>
+              <th>交付成果与交互动作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>pi-price-audit</strong></td>
+              <td><code>pi</code></td>
+              <td>价格数据真实性审计员</td>
+              <td>核验初始 15m K 线数据真实性、时间戳是否多资产严格对齐、是否存在跳空或未来数据偷窥。</td>
+              <td>发现初始价格矩阵存在数据合成痕迹与多资产时间戳对齐偏差，产出异常清单。</td>
+            </tr>
+            <tr>
+              <td><strong>pi-signal-audit</strong></td>
+              <td><code>pi</code></td>
+              <td>信号与 PnL 审计员</td>
+              <td>手工重算波段进出场点，核验 1.5R/2.0R 盈亏比是否双重计入，审查同 Bar 触价先后顺序。</td>
+              <td>核实原有回测脚本存在“同 Bar 优先算止盈”的前瞻性偏差，发出致命漏洞预警。</td>
+            </tr>
+            <tr>
+              <td><strong>leaf-nautilus-smc</strong></td>
+              <td><code>pi</code></td>
+              <td>策略落地工程师 (Implementer)</td>
+              <td>将 SMC 策略全面移植到 NautilusTrader 事件驱动引擎中，编写官方 Netting OMS 适配。</td>
+              <td>交付 <code>src/nautilus_smc_strategy.py</code> 与单元测试 <code>tests/test_nautilus_smc.py</code>。</td>
+            </tr>
+            <tr>
+              <td><strong>leaf-hf-factor-mining</strong></td>
+              <td><code>pi</code></td>
+              <td>微观结构因子挖掘专家</td>
+              <td>借助 <strong>AlphaGPT</strong> (Stack VM 符号挖掘) 与 <strong>Qlib</strong> 提取微观流动性指标。</td>
+              <td>实现 <code>src/qlib_smc_alpha.py</code>，提取 OFI 冲量、公允价值缺口 (FVG) 吸收率与扫荡深度。</td>
+            </tr>
+            <tr>
+              <td><strong>leaf-credal-gate</strong></td>
+              <td><code>opencode</code></td>
+              <td>反过拟合门控架构师</td>
+              <td>基于主观逻辑 (Subjective Logic) 狄利克雷证据理论，搭建不确定性度量模型。</td>
+              <td>编写 <code>src/credal_engine.py</code>，设定认知空虚度 $u &gt; 0.35$ 或买卖冲突度 $C \ge 0.40$ 强制拒单。</td>
+            </tr>
+            <tr>
+              <td><strong>leaf-rd-agent-loop</strong></td>
+              <td><code>pi</code></td>
+              <td>RD-Agent 闭环迭代引擎</td>
+              <td>依据微软 RD-Agent 规范，负责“假说生成 $\to$ 回测反馈 $\to$ 因子演化/剪枝”自动化调度。</td>
+              <td>自动化遍历多资产特征组合，排除无经济学逻辑的过度拟合特征。</td>
+            </tr>
+            <tr>
+              <td><strong>leaf-backtest-walkforward</strong></td>
+              <td><code>pi</code></td>
+              <td>跨周期回测与压力测试</td>
+              <td>执行 3 年自然年滚动窗口回测 (WFO)、样本外测试 (OOS) 以及 10,000 次蒙特卡洛时序置乱。</td>
+              <td>产出完整的多资产敏感性矩阵，计算紧缩夏普比率 (DSR)。</td>
+            </tr>
+            <tr>
+              <td><strong>pi-core-fix / omp-code-fix</strong></td>
+              <td><code>pi</code> / <code>omp</code></td>
+              <td>生产环境紧急抢修工程师</td>
+              <td>修复实盘中出现的“限价单发出假定立即成交（幽灵持仓）”与“门控冲突值 $C=1.0$ 误杀”两大致命 Bug。</td>
+              <td>彻底重构异步成交状态机与事件回调，修复生产级策略 <code>smc_live_trader.py</code>。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">💡 Herdr Agent 交互动作与状态机机制</div>
+        <p>所有 Agent 之间的协作不是无序的聊天，而是通过 <strong>文件契约驱动</strong>：</p>
+        <ol>
+          <li><strong>任务派发 (Assign)</strong>: Captain 自动生成 <code>.herd-dispatch/jobs/&lt;name&gt;/input.md</code>，通过 <code>herdr pane split</code> 创建窗格并拉起专属 Agent。</li>
+          <li><strong>隔离作业 (Git Worktree)</strong>: 各 Worker 都在独立的 <code>.herd-dispatch/worktrees/&lt;name&gt;</code> 分支下编写代码，互不干扰且无锁竞争。</li>
+          <li><strong>监听收集 (Watch & Harvest)</strong>: Captain 轮询 Worker 退出码与输出日志，在验收测试通过后合并 Git 分支到主干。</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 问题 2 -->
+    <section id="question-2">
+      <h2>🌲 二、问题 2：工作流架构（Loop 闭环与 Tree 分层拓扑）</h2>
+      <p>该项目融合了 <strong>Tree 形式的分层任务扇出/汇聚</strong> 与 <strong>三大类闭环反馈 Loop</strong>：</p>
+
+      <div class="diagram-box">
+        <div class="mermaid">
+graph TD
+    UserReq[用户需求: SMC策略 / 日均1-60笔 / 主流币池 / 严防过拟合] --> Captain[Herdr Captain / omp: 投研总指挥]
+
+    subgraph TreeStructure [Tree 拓扑: 分层并行扇出]
+        Captain -->|Git Worktree 分支派发| BranchA[leaf-hf-factor-mining: 因子挖掘]
+        Captain -->|Git Worktree 分支派发| BranchB[leaf-nautilus-smc: 撮合引擎]
+        Captain -->|Git Worktree 分支派发| BranchC[leaf-credal-gate: 反过拟合审计]
+    end
+
+    BranchA --> MergeNode[代码汇聚与统一数据管道]
+    BranchB --> MergeNode
+    BranchC --> MergeNode
+
+    MergeNode --> BacktestEngine[leaf-backtest-walkforward: 跨周期回测]
+
+    subgraph AuditLoop [Loop 1: 白帽打假与质量回测闭环]
+        BacktestEngine --> AuditCheck{发现假数据 / 虚高胜率?}
+        AuditCheck -->|是: 触发复测要求| AuditWorker[pi-price-audit / pi-signal-audit]
+        AuditWorker -->|剥离前瞻偏差| BranchB
+    end
+
+    subgraph RDAgentLoop [Loop 2: 微软 RD-Agent 假设演化循环]
+        BacktestEngine --> EvalLoss{因子信息系数 IC 是否衰减?}
+        EvalLoss -->|是| RDOpt[leaf-rd-agent-loop: 因子剪枝与新特征生成]
+        RDOpt --> BranchA
+    end
+
+    subgraph FixLoop [Loop 3: 实盘 Bug 紧急自愈闭环]
+        BacktestEngine -->|实盘/模拟监控发现异常| MonitorAlert{门控冲突 C=1.0 或限价单虚假成交?}
+        MonitorAlert -->|是| BugFixer[pi-core-fix / omp-code-fix: 热重构]
+        BugFixer --> RegressTest[编写回归测试 test_nautilus_smc_regression.py]
+        RegressTest --> FinalCheck{回归通过?}
+        FinalCheck -->|是| ProdDeploy
+    end
+
+    AuditCheck -->|否: 真实无偏数据| FinalVerdict{双向收敛协议判定}
+    FinalVerdict -->|未达标| DropStrategy[【结论 1: 策略无价值，停止研发】]
+    FinalVerdict -->|通过检验| ProdDeploy[【结论 2: 达成生产标准，交付 OKX 实盘】]
+        </div>
+      </div>
+
+      <h3>工作流中的三大关键 Loop 机制：</h3>
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">1</span> RD-Agent 假设-演化闭环 (Hypothesis Evolution Loop)</div>
+        <p>基于 NeurIPS 2025 微软 RD-Agent 架构。Research Agent 负责生成关于订单流失衡（OFI）和流动性扫荡的先验假说；Development Agent 借助 Qlib 生成特征并回测。当特征的 IC 衰减或在熊市中失效时，触发自动剪枝反馈，进入下一轮迭代。</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">2</span> 白帽打假与红队审计闭环 (Whitehat Audit Loop)</div>
+        <p>当回测结果出现“所有品种交易笔数均为 312 笔、精确 68.27% 胜率”时，立即触发审计警报。系统启动红队 Worker 逐行逆向回测脚本，揪出固定随机种子与同 Bar 止盈计算 Bug，打回重测，阻断虚假成果向生产环境泄漏。</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">3</span> 异步状态机自愈闭环 (Bug Self-Healing Loop)</div>
+        <p>模拟盘整点监控发现空头信号 100% 拒单及限价单发出后立即假定成交的重大缺陷后，调度 <code>pi-core-fix</code> 重新重构订单状态转移，添加 <code>on_order_filled</code> 监听，并通过回归测试确保修复后方可发布。</p>
+      </div>
+    </section>
+
+    <!-- 问题 3 -->
+    <section id="question-3">
+      <h2>🔄 三、问题 3：用户初始文件的先后使用链路、Skills 抓取与端到端时序</h2>
+
+      <h3>1. 用户提供的 56 个初始文件是如何被先后转化的？</h3>
+      <div class="callout success">
+        <div class="callout-title">📂 文件消化与演进路径</div>
+        <ul>
+          <li><strong>Step 1: 阅读策略原型 (<code>smc_optimized/</code>)</strong>：Agent 读取 <code>smc_strategy.py</code> 与 <code>indicators.py</code>，提取 20/50 EMA 顺势、波段回踩确认与 Ross Cameron 动态盈亏比（1:1 平半仓、2:1 跑满）核心逻辑。</li>
+          <li><strong>Step 2: 识别原有脚本瓶颈 (<code>smc_hf_alpha_engine_v1~v6.py</code>, <code>backtest_core.py</code>)</strong>：发现原脚本为简易循环或向量化模拟，未考虑盘口深度、排队耗时与 Taker 高摩擦，且高频化后手续费直接吃掉本金 46%。</li>
+          <li><strong>Step 3: 架构升级与正式产出</strong>：将逻辑全面重构并沉淀为三大核心模块：
+            <br>• 因子工程：<code>src/qlib_smc_alpha.py</code>
+            <br>• 标准回测引擎：<code>src/nautilus_smc_strategy.py</code>
+            <br>• 实盘挂载代码：<code>deploy/nautilus_okx_smc/live_smc_strategy.py</code>
+          </li>
+          <li><strong>Step 4: 规范沉淀 (<code>docs/workflow/QUANT_RESEARCH_WORKFLOW.md</code>)</strong>：将其确立为多智能体必须遵守的“双向确定性收敛协议”。</li>
+        </ul>
+      </div>
+
+      <h3>2. 技能库 (Skills) 的精准调用时机</h3>
+      <ul>
+        <li><strong><code>herdr-dispatch</code> / <code>herdr-swarm</code></strong>：在任务启动时触发，用于拉起多智能体窗格、创建 Git Worktree，避免单 Agent 陷入死循环。</li>
+        <li><strong><code>agent-reach</code></strong>：在遇到 NautilusTrader 官方 API 更新、OKX WebSocket 细节或 NeurIPS 论文算法公式时调用，进行实时互联网事实检索。</li>
+        <li><strong><code>laya-reasoning</code></strong>：在决定是否判定策略不可行、是否重构订单状态机等不可逆决策点上调用，进行非自回归风险校准。</li>
+      </ul>
+
+      <h3>3. 完整端到端时序图 (Sequence Flow)</h3>
+      <div class="diagram-box">
+        <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Human as 👤 人工主管 (Quant Lead)
+    participant Captain as 🤖 Captain (omp)
+    participant Worker1 as 🛠️ Factor Miner (pi)
+    participant Worker2 as ⚙️ Implementer (opencode)
+    participant Worker3 as 🛡️ Whitehat Auditor (pi)
+    participant Exchange as 📡 Nautilus / OKX Demo
+
+    rect rgb(20, 30, 45)
+    Note over Human, Captain: Phase 1: 业务输入与架构编排
+    Human->>Captain: 提出约束: 1-60笔/主流币/真实全摩擦/避免过拟合
+    Captain->>Captain: 读取 QUANT_RESEARCH_WORKFLOW.md，确立双向收敛协议
+    Captain->>Worker1: 派发 [leaf-hf-factor-mining] (因果微结构因子挖掘)
+    Captain->>Worker2: 派发 [leaf-nautilus-smc] (NautilusTrader 原生移植)
+    Captain->>Worker3: 派发 [leaf-credal-gate] (狄利克雷反幻觉门控)
+    end
+
+    rect rgb(30, 40, 35)
+    Note over Worker1, Worker3: Phase 2: 并行特征挖掘与原型回测
+    Worker1->>Captain: 交付 src/qlib_smc_alpha.py (OFI, FVG, Sweep 因子)
+    Worker2->>Captain: 交付 src/nautilus_smc_strategy.py (初始版本)
+    Worker3->>Captain: 交付 src/credal_engine.py (u > 0.35 拦截规则)
+    Captain->>Captain: 运行初步多资产横截面回测
+    end
+
+    rect rgb(45, 25, 30)
+    Note over Human, Captain: Phase 3: 白帽打假与致命 Bug 抢修 (核心转折)
+    Human->>Captain: 严厉打假: 全品种均为312笔、68%胜率? 必须真实复测!
+    Captain->>Worker3: 调度红队审计: 审查数据源真伪与同Bar止盈偷窥
+    Worker3-->>Captain: 证实缺陷: 存在假数据种子 & 限价单发出即假定成交
+    Captain->>Worker2: 调度 pi-core-fix: 重构为 on_order_filled 异步状态驱动
+    Worker2->>Worker2: 修复限价单幽灵持仓 + 修复空头冲突度 C=1.0 逻辑 Bug
+    Worker2-->>Captain: 编写并跑通单元回归测试 test_nautilus_smc_regression.py
+    end
+
+    rect rgb(25, 40, 35)
+    Note over Captain, Exchange: Phase 4: 悲观撮合验证与生产实盘交付
+    Captain->>Captain: 运行严格悲观撮合回测 (穿透挂单 + 同Bar先止损 + 手续费滑点)
+    Captain->>Human: 出具《生产级高频加密资产 SMC 策略研究报告》(收敛于结论2)
+    Human->>Captain: 确认签字: 注入 OKX Demo API Key 进行实盘/模拟盘挂载
+    Captain->>Exchange: 部署并启动 live_okx_smc.py (连接 WebSocket、启动整点监控)
+    end
+        </div>
+      </div>
+    </section>
+
+    <!-- 人工复现指南 -->
+    <section id="reproduce-guide">
+      <h2>🛠️ 四、人工独立复现操作指南 (Step-by-Step SOP)</h2>
+      <p>脱离多智能体环境，由人工工程师独立复现该项目的标准步骤如下：</p>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">1</span> 准备高频环境与真实 K 线数据</div>
+        <p>拉取 BTC、ETH、SOL、BNB 真实 15m K 线数据，严禁使用任何随机合成数据：</p>
+        <div class="code-block">
+pip install nautilus_trader pandas numpy scipy statsmodels
+# 数据文件存放至 data/ 目录，必须包含 Open, High, Low, Close, Volume, Timestamp</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">2</span> 计算因果微观结构因子 (对应 <code>src/qlib_smc_alpha.py</code>)</div>
+        <p>按滑动窗口（无未来函数）计算 OFI 冲量与公允价值缺口（FVG）：</p>
+        <div class="code-block">
+# 1. 订单流失衡冲量 OFI
+ofi = ((close - low) / (high - low + 1e-8)) * (volume / volume.rolling(20).mean())
+
+# 2. 公允价值缺口 FVG (看涨: low[t] > high[t-2])
+bullish_fvg = (low - high.shift(2)).clip(lower=0)
+
+# 3. 波动率通道滤波: 仅在 0.55 <= (ATR14 / ATR100) <= 1.80 时激活</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">3</span> 构造狄利克雷反幻觉门控 (对应 <code>src/credal_engine.py</code>)</div>
+        <p>基于主观逻辑计算多空证据的不确定度与冲突度：</p>
+        <div class="code-block">
+# 计算不确定度 u
+total_evidence = bull_ev + bear_ev
+u = 2.0 / (total_evidence + 2.0)
+
+# 判定硬性门禁
+if u > 0.35 or conflict_c >= 0.40:
+    signal = 0  # 强制拒单，杜绝假突破与过度拟合</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">4</span> 配置 NautilusTrader 悲观撮合</div>
+        <p>坚决杜绝“限价单发出即假定成交”：</p>
+        <div class="code-block">
+# 状态转移必须由回调驱动
+def on_order_filled(self, event: OrderFilled):
+    self.in_position = True
+    self.entry_price = event.last_px
+
+# 撮合配置: Maker 2 bps + 同 Bar 优先止损判定</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header"><span class="step-num">5</span> 样本外回测与实盘挂载</div>
+        <p>执行 3 年滚动窗口 (WFO) 检验，满足年化夏普比率 &gt; 1.8、最大回撤 &lt; 2% 后，挂载 <code>live_okx_smc.py</code> 进入生产运行。</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
