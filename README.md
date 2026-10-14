@@ -140,6 +140,13 @@ bear_ev = max(0.0, score_short / 10.0)
 ---
 
 ## 附录文件与全景归档
+- **核心复盘工作流目录**: [`复盘工作流/`](./复盘工作流/README.md)
+  - `01_黑箱解构与独立红队工程审计报告.md`: 5 大核心黑箱机理逐行解剖
+  - `02_多智能体研发完整复盘白皮书.html`: 工业级 Mermaid 时序拓扑与收敛全景复盘
+  - `03_原始文件清单与交付策略架构.md`: 56 个原始文件演进与生产交付映射
+  - `04_历史关键用户提示词与监控告警汇总.md`: 质询 312 笔假数据与整点监控告警
+  - `05_实盘AB对照_风险倍数开仓与逐笔PnL复盘.md`: 资本规模非线性变异与地板效应审计
+  - `audit_tools/`: 数据连续性与时钟前瞻性静态审计工具集
 - 详细黑箱解构报告：`BLACKBOX_DECONSTRUCTION_AND_AUDIT.md`
 - 视觉化工作流全景复盘：`AMERICA_STOCKS_WORKFLOW_POST_MORTEM.html`
 - 历史用户真实指令合集：`AMERICA_STOCKS_USER_PROMPTS_EXTRACT.md`
