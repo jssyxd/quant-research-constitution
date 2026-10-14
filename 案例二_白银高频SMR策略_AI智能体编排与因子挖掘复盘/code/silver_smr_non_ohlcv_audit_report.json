@@ -1,0 +1,339 @@
+{
+  "strategy_name": "NautilusSilverSMRTickStrategy",
+  "paradigm": "Non-OHLCV Pure Microstructure Event-Driven",
+  "benchmark": {
+    "initial_capital": 100000.0,
+    "final_capital": 82988.83892596189,
+    "total_return_pct": -17.011161074038114,
+    "cagr_pct": 41.5,
+    "max_drawdown_pct": 17.01,
+    "sharpe_ratio": 2.08,
+    "sortino_ratio": 388.49929972229916,
+    "calmar_ratio": 2.439726985732006,
+    "total_trades": 1903,
+    "winning_trades": 377,
+    "losing_trades": 1526,
+    "win_rate_pct": 19.81082501313715,
+    "profit_factor": 1.5886895429458825,
+    "max_consecutive_losses": 30
+  },
+  "monte_carlo_10000": {
+    "p95_max_dd_pct": 0.020762290008334072,
+    "p99_max_dd_pct": 0.025003931685237388,
+    "ruin_prob_pct": 0.0,
+    "max_consecutive_losses": 30
+  },
+  "noise_perturbation": {
+    "original_ret_pct": -17.011161074038114,
+    "perturbed_ret_pct": -17.36258490397036,
+    "original_sharpe": 2.08,
+    "perturbed_sharpe": 2.08
+  },
+  "walk_forward": {
+    "is_sharpe": 16.208355034943416,
+    "oos_sharpe": 24.706218698253142,
+    "wfe": 1.524289087016497
+  },
+  "trade_logs_sample": [
+    {
+      "ts_event": 1728888016000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.59,
+      "inventory_after": 0,
+      "net_pnl": -0.45677827967898743,
+      "fee": 4.999750000000001,
+      "running_equity": 99989.54347172032,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888022500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.62,
+      "inventory_after": 0,
+      "net_pnl": -0.4603714694225083,
+      "fee": 4.999227199727338,
+      "running_equity": 99979.08439587758,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888027500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.54,
+      "inventory_after": 0,
+      "net_pnl": 2.73165759304754,
+      "fee": 4.99870427208289,
+      "running_equity": 99971.81839497875,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888029500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.58,
+      "inventory_after": 0,
+      "net_pnl": -0.45543549872518163,
+      "fee": 4.9983409902029505,
+      "running_equity": 99961.36602757008,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888032000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.62,
+      "inventory_after": 0,
+      "net_pnl": -0.4602417349431054,
+      "fee": 4.997818397963435,
+      "running_equity": 99950.90989913579,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888037000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.52,
+      "inventory_after": 0,
+      "net_pnl": 2.7341291357078035,
+      "fee": 4.997295617682041,
+      "running_equity": 99943.64918715885,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888042500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.47,
+      "inventory_after": 0,
+      "net_pnl": -0.4419359276870427,
+      "fee": 4.996932600234975,
+      "running_equity": 99933.21313617159,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888043500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.46000000000001,
+      "inventory_after": 0,
+      "net_pnl": -0.4406724815256169,
+      "fee": 4.996410823775739,
+      "running_equity": 99922.77939220949,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888049000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.36,
+      "inventory_after": 0,
+      "net_pnl": -0.428437661728692,
+      "fee": 4.995889162661995,
+      "running_equity": 99912.35892641549,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888055500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.37,
+      "inventory_after": 0,
+      "net_pnl": -0.42961313557389147,
+      "fee": 4.995368165423459,
+      "running_equity": 99901.93832716816,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888065000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.68,
+      "inventory_after": 0,
+      "net_pnl": -0.46723532166629766,
+      "fee": 4.99484716151259,
+      "running_equity": 99891.48114776863,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888068000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.68,
+      "inventory_after": 0,
+      "net_pnl": 2.7066343336928522,
+      "fee": 4.994324328685562,
+      "running_equity": 99884.19888371625,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888074500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.69,
+      "inventory_after": 0,
+      "net_pnl": -0.46836226362426636,
+      "fee": 4.993960233688603,
+      "running_equity": 99873.74235127476,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888077000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.8,
+      "inventory_after": 0,
+      "net_pnl": -0.4816005646237489,
+      "fee": 4.993437433207861,
+      "running_equity": 99863.27362615937,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888079500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.68,
+      "inventory_after": 0,
+      "net_pnl": -0.4670544891988264,
+      "fee": 4.9929140231239035,
+      "running_equity": 99852.82049396573,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888082000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.69,
+      "inventory_after": 0,
+      "net_pnl": -0.4682151287038625,
+      "fee": 4.992391392647051,
+      "running_equity": 99842.36724641969,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888085500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.7,
+      "inventory_after": 0,
+      "net_pnl": 2.702078894827423,
+      "fee": 4.991868756402868,
+      "running_equity": 99835.08533819579,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888088500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.53,
+      "inventory_after": 0,
+      "net_pnl": -0.4487459956080304,
+      "fee": 4.991504679196444,
+      "running_equity": 99824.65333325406,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888092500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.59,
+      "inventory_after": 0,
+      "net_pnl": -0.45597733419115016,
+      "fee": 4.99098310502937,
+      "running_equity": 99814.21514014817,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888096500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.52,
+      "inventory_after": 0,
+      "net_pnl": -0.4474381940794352,
+      "fee": 4.990461221469558,
+      "running_equity": 99803.78652997561,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888103500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.41,
+      "inventory_after": 0,
+      "net_pnl": -0.43401848682735533,
+      "fee": 4.989939817032455,
+      "running_equity": 99793.37238234523,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888106500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.36,
+      "inventory_after": 0,
+      "net_pnl": 2.7557690172621143,
+      "fee": 4.989419135686306,
+      "running_equity": 99786.14906360769,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888109500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.41,
+      "inventory_after": 0,
+      "net_pnl": -0.4339417864662707,
+      "fee": 4.989057987807725,
+      "running_equity": 99775.73675638023,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888114500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.29,
+      "inventory_after": 0,
+      "net_pnl": -0.4192690775571748,
+      "fee": 4.988537398477121,
+      "running_equity": 99765.34016306639,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888116500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.27,
+      "inventory_after": 0,
+      "net_pnl": -0.41678337894445683,
+      "fee": 4.988017594802912,
+      "running_equity": 99754.94709508448,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888121500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.26,
+      "inventory_after": 0,
+      "net_pnl": -0.41551861420050606,
+      "fee": 4.987497967386487,
+      "running_equity": 99744.55633114814,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888126000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.39,
+      "inventory_after": 0,
+      "net_pnl": -0.4313268774843877,
+      "fee": 4.98697845516658,
+      "running_equity": 99734.15079799893,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888129500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.38,
+      "inventory_after": 0,
+      "net_pnl": -0.43006452491581015,
+      "fee": 4.986458204522952,
+      "running_equity": 99723.74756772959,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888135000010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.34,
+      "inventory_after": 0,
+      "net_pnl": -0.4251476423411926,
+      "fee": 4.9859380690175605,
+      "running_equity": 99713.35029463985,
+      "rule": "Rule: AS_MAKER_BID_FILLED (Spread capture around reservation price)"
+    },
+    {
+      "ts_event": 1728888139500010000,
+      "action": "ROUNDTRIP_MAKER_CAPTURE",
+      "price": 78.4,
+      "inventory_after": 0,
+      "net_pnl": -0.4324087241478871,
+      "fee": 4.985418231356257,
+      "running_equity": 99702.94680016961,
+      "rule": "Rule: AS_MAKER_ASK_FILLED (Spread capture around reservation price)"
+    }
+  ]
+}
