@@ -1,0 +1,69 @@
+{
+  "target": {
+    "cagr": 0.421,
+    "sharpe": 2.08,
+    "win_rate": 0.64,
+    "capacity_cny": 80000000
+  },
+  "is_results": {
+    "initial_equity": 100000.0,
+    "final_equity": 19688.86294920494,
+    "total_return_pct": -80.31113705079507,
+    "cagr": -0.9294624605579236,
+    "sharpe": -6.462660364100945,
+    "win_rate": 0.3469613259668508,
+    "max_dd": -0.8030776276745867,
+    "total_trades": 905,
+    "days": 223.85416666666666
+  },
+  "oos_results": {
+    "initial_equity": 19688.86294920494,
+    "final_equity": 11611.28088045017,
+    "total_return_pct": -41.026148079724194,
+    "cagr": -0.9681336504615449,
+    "sharpe": -10.814797725825283,
+    "win_rate": 0.3194444444444444,
+    "max_dd": -0.4145799422497638,
+    "total_trades": 216,
+    "days": 55.96875
+  },
+  "full_results": {
+    "initial_equity": 100000.0,
+    "final_equity": 11524.889612383105,
+    "total_return_pct": -88.4751103876169,
+    "cagr": -0.9404112810128545,
+    "sharpe": -6.773488369267023,
+    "win_rate": 0.3421985815602837,
+    "max_dd": -0.8855950336842969,
+    "total_trades": 1128,
+    "days": 279.8229166666667
+  },
+  "no_credal_comparison": {
+    "initial_equity": 100000.0,
+    "final_equity": 8820.913944854075,
+    "total_return_pct": -91.17908605514592,
+    "cagr": -0.9579670729067574,
+    "sharpe": -7.189631527587675,
+    "win_rate": 0.33980582524271846,
+    "max_dd": -0.9124367871037617,
+    "total_trades": 1236,
+    "days": 279.8229166666667
+  },
+  "dsr_audit": {
+    "estimated_sr": -10.814797725825283,
+    "expected_max_sr_null": 2.5306028932011424,
+    "dsr_probability": 5.644337211559988e-143,
+    "is_statistically_significant": false,
+    "haircut_sr": -8.284195066618592,
+    "n_trials": 100
+  },
+  "monte_carlo_audit": {
+    "observed_sr": -0.3406341102619118,
+    "mc_sharpe_5th": -0.34063411026191187,
+    "mc_sharpe_50th": -0.34063411026191187,
+    "mc_sharpe_95th": -0.3406341102619118,
+    "mc_max_dd_95th": 0.2996155674927384,
+    "permutation_p_value": 0.457,
+    "is_robust": false
+  }
+}

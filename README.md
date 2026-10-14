@@ -139,15 +139,22 @@ bear_ev = max(0.0, score_short / 10.0)
 
 ---
 
-## 附录文件与全景归档
-- **核心复盘工作流目录**: [`复盘工作流/`](./复盘工作流/README.md)
+## 附录文件与工业级实战案例库
+
+### 案例一：多资产 SMC 动量回踩量化系统（美股与加密货币实盘复盘）
+- **目录**: [`复盘工作流/`](./复盘工作流/README.md)
   - `01_黑箱解构与独立红队工程审计报告.md`: 5 大核心黑箱机理逐行解剖
   - `02_多智能体研发完整复盘白皮书.html`: 工业级 Mermaid 时序拓扑与收敛全景复盘
   - `03_原始文件清单与交付策略架构.md`: 56 个原始文件演进与生产交付映射
   - `04_历史关键用户提示词与监控告警汇总.md`: 质询 312 笔假数据与整点监控告警
   - `05_实盘AB对照_风险倍数开仓与逐笔PnL复盘.md`: 资本规模非线性变异与地板效应审计
   - `audit_tools/`: 数据连续性与时钟前瞻性静态审计工具集
-- 详细黑箱解构报告：`BLACKBOX_DECONSTRUCTION_AND_AUDIT.md`
-- 视觉化工作流全景复盘：`AMERICA_STOCKS_WORKFLOW_POST_MORTEM.html`
-- 历史用户真实指令合集：`AMERICA_STOCKS_USER_PROMPTS_EXTRACT.md`
-- 原始与最终交付清单：`AMERICA_STOCKS_ORIGINAL_AND_FINAL_DELIVERY.md`
+
+### 案例二：白银高频微观结构自适应 Timing 与深度在线蒸馏策略（SMR）— AI 智能体编排与因子挖掘全景复盘
+- **目录**: [`案例二_白银高频SMR策略_AI智能体编排与因子挖掘复盘/`](./案例二_白银高频SMR策略_AI智能体编排与因子挖掘复盘/README.md)
+  - `01_AI编排工作流与多Agent协同架构.md`: Captain-Worker 两级拓扑、Herdr Dispatch 调度规范、输入输出契约隔离、子 Agent 自动销毁只留主 Session 的零资源泄露原则
+  - `02_用户提示词全景演进与投研决策拓扑.md`: 逐轮忠实记录人类研究员的高阶 Prompt、意图演进拓扑、从浅层 Pine 转向工业级多智能体系统的范式大跃迁
+  - `03_独立因子挖掘与样本外复现标准.md`: 微软 RD-Agent / Qlib 算子群（12 个通过因子）与 AlphaGPT 符号表达式树（6 个通过因子），前 80% IS 与 后 20% OOS 盲测指标表
+  - `04_Credal_Transformer反过拟合审查与NautilusTrader回测引擎.md`: NeurIPS 2025 Credal Transformer 狄利克雷证据不确定性门控 ($u \le 0.35, C < 0.40$)、通缩夏普 (DSR)、Harvey-Liu 发型扣减与 NautilusTrader 事件驱动引擎
+  - `05_多时间共振与微观执行诊断白皮书.md`: 严谨数学实测解答“为什么 15m 回测、1m 信号究竟怎么用、为什么必须小周期 Timing 入场大周期退出、三层多时间共振架构”及第二阶段 LOB 演进方案
+  - `code/`: 包含全套经过实跑检验的 Python 脚本、NautilusTrader 策略类、Credal 门控审查模块与原始回测结果 JSON
