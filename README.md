@@ -158,3 +158,9 @@ bear_ev = max(0.0, score_short / 10.0)
   - `04_Credal_Transformer反过拟合审查与NautilusTrader回测引擎.md`: NeurIPS 2025 Credal Transformer 狄利克雷证据不确定性门控 ($u \le 0.35, C < 0.40$)、通缩夏普 (DSR)、Harvey-Liu 发型扣减与 NautilusTrader 事件驱动引擎
   - `05_多时间共振与微观执行诊断白皮书.md`: 严谨数学实测解答“为什么 15m 回测、1m 信号究竟怎么用、为什么必须小周期 Timing 入场大周期退出、三层多时间共振架构”及第二阶段 LOB 演进方案
   - `code/`: 包含全套经过实跑检验的 Python 脚本、NautilusTrader 策略类、Credal 门控审查模块与原始回测结果 JSON
+
+### 案例三 / 工作流案例：白银高频 SMR 多智能体投研与反过拟合审查标准工作流 (Standard Workflow SOP)
+- **目录**: [`工作流案例_白银高频SMR多智能体投研与反过拟合审查SOP/`](./工作流案例_白银高频SMR多智能体投研与反过拟合审查SOP/README.md)
+  - `README.md`: 包含 Phase 0 至 Phase 5 六大不可逆阶段的 Mermaid 全景流程图、8 类 Agent 职责与工具准入矩阵、各环节物理输入与交付标准、终审双向收敛决断协议
+  - `01_全景问答记录与演进对账.md`: 完整还原会话中用户人工键入的 Prompt (Q) 与 Agent 核心工作及客观应答总结 (A)
+  - `templates/`: 包含可直接复用的自动化反造假扫毒工具 (`audit_anti_p_hacking.py`) 与 Credal 不确定性门控脚本 (`credal_dirichlet_gate.py`)
