@@ -164,3 +164,9 @@ bear_ev = max(0.0, score_short / 10.0)
   - `README.md`: 包含 Phase 0 至 Phase 5 六大不可逆阶段的 Mermaid 全景流程图、8 类 Agent 职责与工具准入矩阵、各环节物理输入与交付标准、终审双向收敛决断协议
   - `01_全景问答记录与演进对账.md`: 完整还原会话中用户人工键入的 Prompt (Q) 与 Agent 核心工作及客观应答总结 (A)
   - `templates/`: 包含可直接复用的自动化反造假扫毒工具 (`audit_anti_p_hacking.py`) 与 Credal 不确定性门控脚本 (`credal_dirichlet_gate.py`)
+
+### 案例四 / 工作流案例：DOGE 高频微观非线性动量多智能体投研与反造假审查标准工作流 (SOP)
+- **目录**: [`工作流案例_DOGE高频微观非线性动量多智能体投研与反造假审查SOP/`](./工作流案例_DOGE高频微观非线性动量多智能体投研与反造假审查SOP/README.md)
+  - `README.md`: 包含 Phase 0 至 Phase 5 六大不可逆阶段的 Mermaid 流程图、8 类智能体角色分配与权责矩阵、各环节必须补齐的物理数据契约、大资金 (1500万) 平方根滑点冲击与双重会计簿记卡点、以及实盘避坑规范清单
+  - `01_全景问答记录与演进对账.md`: 完整还原用户所有手动输入的提示词 (Q) 与 Agent 对应的核心研发、造假大起底、物理去作弊重构与终审交付对账 (A)
+  - `templates/`: 包含标准投研委托任务书模板 (`task_brief_template.md`) 与独立法医级量化审计报告模板 (`forensic_audit_template.md`)
