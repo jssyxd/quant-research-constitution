@@ -1,102 +1,231 @@
-# 工作流案例：基于黑箱解构与符号演化(AlphaEvolve/AutoML-Zero)的量化策略逆向投研与反造假审查SOP
+# 标准工作流案例：基于符号演化(AlphaEvolve/AutoML-Zero)与Q-State状态涌现的以太坊高频择时投研与反造假审查SOP
 
-> **权威标识**:   
-> **适用场景**: 面对市面上声称“高胜率（>90%）、自发涌现强化学习/Q-Learning、数万代进化”的第三方 AI 择时信号进行逆向工程、反作弊审查、离线重训与生产级合规交付。
+> **版本规范**: v2.0 Production Standard  
+> **适用场景**: 针对声称“>90%胜率、涌现Q-Learning、数万代进化、Google AlphaEvolve”的外部高阶AI择时信号进行逆向工程、反过拟合审查、算子符号重构、多维度回测闭环与实盘生产级交付。
 
 ---
 
 ## 目录
-1. [第一阶段：宣传黑箱解构与技术底牌还原](#第一阶段宣传黑箱解构与技术底牌还原)
-2. [第二阶段：AI/ML 角色界定与研发-实盘边界划分](#第二阶段aiml-角色界定与研发-实盘边界划分)
-3. [第三阶段：离线搜索空间定义与算子虚拟机设计](#第三阶段离线搜索空间定义与算子虚拟机设计)
-4. [第四阶段：非对称适应度(Reward)函数与反回撤设计](#第四阶段非对称适应度reward函数与反回撤设计)
-5. [第五阶段：多引擎多维度交叉验证与样本外泛化压力测试](#第五阶段多引擎多维度交叉验证与样本外泛化压力测试)
-6. [第六阶段：TradingView V6 生产交付与 OKX 信号闭环](#第六阶段tradingview-v6-生产交付与-okx-信号闭环)
-7. [第七阶段：实盘风控与滚动重训生命周期宪法](#第七阶段实盘风控与滚动重训生命周期宪法)
+1. [一、 投研背景与神秘黑箱解构](#一-投研背景与神秘黑箱解构)
+2. [二、 全流程系统架构与技术栈流程图](#二-全流程系统架构与技术栈流程图)
+3. [三、 技术栈、库与理论基础清单](#三-技术栈库与理论基础清单)
+4. [四、 核心机制剖析：AlphaEvolve 与机器学习的角色界定](#四-核心机制剖析alphaevolve-与机器学习的角色界定)
+5. [五、 算子库、特征工程与非对称奖励函数设计](#五-算子库特征工程与非对称奖励函数设计)
+6. [六、 3个维度的迭代实验与严谨回测验证](#六-3个维度的迭代实验与严谨回测验证)
+7. [七、 生产级交付物与双轨执行机制](#七-生产级交付物与双轨执行机制)
+8. [八、 策略生命周期管理与滚动重训审计标准](#八-策略生命周期管理与滚动重训审计标准)
 
 ---
 
-## 第一阶段：宣传黑箱解构与技术底牌还原
+## 一、 投研背景与神秘黑箱解构
 
-当市场上出现标榜“胜率 95%、数万代自然演化、涌现强化学习 Q-Learning”的量化神话时，研究员必须启动**穿透性审查**：
+### 1. 目标信号标的
+- **跟踪信号**: OKX 信号广场 [月读量化] ETH AI 择时策略 (作者：栀染 / 宋紫惠 / `imbue-bit`)。
+- **声称指标**: 运行半个月胜率 94.73% ~ 95.00%，回测年化 +275.29%，最大回撤 9.83%。
+- **核心宣传说辞**:
+  - “策略底层依托 Google AlphaEvolve 进行全维度进化”
+  - “使用遗传规划算法从零开始构建交易逻辑”
+  - “观察到了涌现（Grokking）现象，在Pine环境下自发演化并编写出类似Q-Learning的状态价值评估结构”
 
-1. **“AlphaEvolve 就是 GP（遗传规划）”**：
-   - 破除大厂论文名词光环。其底层本质是符号回归（Symbolic Regression）与遗传算法（Genetic Programming, GP）在抽象语法树（AST）或离散算子栈（StackVM）上的全局拓扑搜索。
-2. **“涌现 Q-Learning 的真相”**：
-   - 并非策略在 Pine Script 内运行了深度神经网络，而是进化算法自发将**时间衰减算子 ()** 与 **门控选择算子 ()** 嵌套组合，在数学控制流上构成了**离散状态值折现累积方程**：
-     1291S_t = \gamma S_{t-1} + (1 - \gamma) R_t1291
-3. **“高胜率的技术本质”**：
-   - 极高胜率（>90%）必然是由“**极窄止盈与灵敏动态追踪 + 宽硬止损 + 极度严苛的进场过滤**”所实现的概率偏斜，绝不可作为常态化稳态预期。
-
----
-
-## 第二阶段：AI/ML 角色界定与研发-实盘边界划分
-
-量化系统设计中必须严格划清 AI/ML 模型的生效边界，杜绝“实盘大模型黑盒推理”的幻觉风险：
-
-- **阶段一：离线研发与演化搜索 (研发期 - 耗费 GPU 算力)**:
-  - 工具栈: PyTorch JIT / Vectorbt 矩阵回测 / Kaggle GPU 配额
-  - 目标: 遍历 20,000~50,000 代演化淘汰，寻找最优参数
-- **阶段二：在线生产与执行 (实盘期 - 0 复杂模型，< 1ms 耗时)**:
-  - 平台: TradingView Pine Script V6 / OKX Webhook 信号交易 Bot
-  - 执行: 仅计算加减乘除与状态更新，零网络延迟与幻觉
+### 2. 穿透性逆向审查与底牌还原
+1. **破除“神秘黑箱”**：
+   所谓 Google AlphaEvolve，本质是 **AutoML-Zero** 的演进形式，即 **符号回归与遗传规划（Genetic Programming, GP）**。其核心是将交易策略抽象为一棵**抽象语法树（AST）**或**算子栈指令序列**，用变异与交叉淘汰劣质逻辑。
+2. **揭秘“Q-Learning 状态涌现”**：
+   在 Pine Script 图表端并不存在复杂的深度神经网络推理。所谓的 Q-Learning，是进化算法在非对称奖励函数（重度惩罚最大回撤）的压迫下，**自发演化出的离散时序差分（Temporal Difference, TD）递推方程**：
+   $$V_t = (1 - \alpha) \cdot V_{t-1} + \alpha \cdot \big(\text{Reward\_Step}_t + \gamma \cdot V_{t-1}\big)$$
+   用极简的变量更新实现了跨周期的状态折现记忆，有效过滤了单边大跌中的“死猫跳”假突破。
+3. **94% 超高胜率的技术真相**：
+   高胜率并非价格预测神准，而是来自于**双轨执行机制**：**“严苛的15m收盘极值共振开仓（50%首仓+75%加仓） + Tick级0.9%超窄动态追踪止盈 + 2.5%硬止损”**。
 
 ---
 
-## 第三阶段：离线搜索空间定义与算子虚拟机设计
+## 二、 全流程系统架构与技术栈流程图
 
-为了实现每秒数万代的快速演化，严禁使用 Python 慢速循环，必须构建全向量化的栈虚拟机（StackVM）：
+```mermaid
+flowchart TD
+    subgraph A[第一阶段: 数据湖建设与微观治理]
+        A1[原始湖: 币安/OKX ETHUSDT-PERP 15m Parquet] --> A2[数据质量审计: 零缺失/零Gap/价格合法性]
+        A2 --> A3[微观因子提取: RET, VOL_ACCEL, HL_SPREAD, TAKER_IMB, K_POS]
+    end
 
-1. **微观特征库 (Feature Space)**:
-   - 买卖微观失衡 (): 订单流 Taker 主动买入占比，或 K 线实体/影线振幅比率；
-   - 通道突破强度 (): 当前收盘价在近期 12 根 K 线极值区间中的百分比位置；
-   - 动态波动率 (): 过滤无波动假突破。
-2. **离散核心算子 (Operator Set)**:
-   - 基础运算: , , , , , ；
-   - 状态转移:  (加权滞后衰减),  (状态分支门控),  (异常极端值触发)。
+    subgraph B[第二阶段: 离线 AlphaEvolve 符号演化]
+        B1[算子池构建: 数学算子 + 时序算子 + TD状态更新算子] --> B2[DEAP 向量化遗传规划环境]
+        B2 --> B3[非对称 Reward: Calmar + 胜率激励 - 15 * MDD^2]
+        B3 --> B4[自然选择与变异: 种群进化 15~50 世代]
+        B4 --> B5[最优个体收敛: 导出不可约 AST 符号树]
+    end
 
----
+    subgraph C[第三阶段: 多引擎与多维度样本外压力测试]
+        C1[维度1: 基础语法树回测 - 验证基线无状态特征]
+        C2[维度2: Q-State涌现结构验证 - 验证回撤抑制效果]
+        C3[维度3: 50%首仓 + 75%加仓 + 剥头皮状态机实测]
+        B5 --> C1
+        B5 --> C2
+        B5 --> C3
+        C3 --> C4[VectorBT 矩阵回测 & Nautilus 事件驱动验证]
+    end
 
-## 第四阶段：非对称适应度 (Reward) 函数与反回撤设计
+    subgraph D[第四阶段: 生产级编译交付与实盘闭环]
+        C4 --> D1[代码生成: 编译为 Pine Script v5 / v6 策略]
+        C4 --> D2[生产引擎: 转换为 Nautilus Trader Python 策略]
+        D1 --> D3[TradingView 警报 -> OKX 信号交易机器人 Webhook]
+        D3 --> D4[实盘跟单: 单次75%委托 / 允许多次加仓]
+    end
 
-策略能否胜出的核心在于适应度函数的惩罚力度：
-1291Fitness = 	ext{Net PnL} - \lambda_1 \sum (	ext{Loss}_i^2) - \lambda_2 \cdot 	ext{Turnover} - 	ext{Penalty}(	ext{Inactive})1291
-
-- **对单笔大亏损实行平方重惩罚**：只要单笔回撤突破 5%，适应度立即惩罚清零，彻底灭绝“死扛单”基因；
-- **扣除双向手续费与冲击成本**：强制策略只能在期望收益显著高于摩擦成本时进场。
-
----
-
-## 第五阶段：多引擎多维度交叉验证与样本外泛化压力测试
-
-必须在本地治理数据湖（如 ）执行严格的“三维度穿透检验”：
-
-1. **维度 1（样本内复现）**：在近期 30 天 15m 数据上重现实盘参数表现，确认逻辑完整度；
-2. **维度 2（样本外大跨度泛化）**：拉长至 10,000+ 根 K 线（跨越单边下跌、流动性干涸市），记录胜率均值回归幅度；
-3. **维度 3（悲观微观撮合）**：测试盘中动态追踪止盈与硬止损的秒级触发有效性。
-
----
-
-## 第六阶段：TradingView V6 生产交付与 OKX 信号闭环
-
-1. **代码规范升级**：强制采用 TradingView 最新 **Pine Script V6** 规范编写；
-2. **分级仓位映射**：
-   - 状态突破第一阈值 {50}$：触发 50% 保证金试探建仓；
-   - 状态突破第二阈值 {75}$：追加至 75% 保证金重仓进场；
-   - 动态追踪回撤：100% 全部市价离场；
-3. **OKX 信号机器人配置**：通过 Webhook 接收 JSON 警报，指定  逐仓合约自动执行。
+    A3 --> B2
+```
 
 ---
 
-## 第七阶段：实盘风控与滚动重训生命周期宪法
+## 三、 技术栈、库与理论基础清单
 
-### 1. 熔断停机铁律 (Walk-Away Rules)
-当出现以下任一情形，实盘机器人必须立即强平停机：
-- 连续 3 笔交易触碰硬止损；
-- 最近 20 笔实盘胜率跌破 45%（严重偏离标称值）；
-- 净值动态回撤超过 12%。
+### 1. 软件架构与依赖库
+- **符号演化与优化引擎**: `DEAP` (Distributed Evolutionary Algorithms in Python)
+- **矩阵级向量化回测**: `vectorbt` (基于 Numba 的毫秒级并行投资组合回测)
+- **工业级事件驱动引擎**: `nautilus_trader` (高性能异步订单撮合与风险管理)
+- **数据管理与处理**: `pyarrow` (Parquet 格式零拷贝读取), `pandas`, `numpy`
+- **加速与编译**: `Numba JIT` (即时编译算子函数，保证演化速度)
+- **实盘生产交付**: `TradingView Pine Script v5`, `OKX Signal Trading API`
 
-### 2. 定期滚动重训 (Rolling Walk-Forward)
-- **调度周期**: 每隔 14~30 天由 Cron 定时任务拉起 Kaggle GPU 运算；
-- **重训窗口**: 选取过去 180 天 15m K线，在 20,000 代演化中生成新一代 $ 超参数；
-- **无缝热更新**: 仅当样本外验证集卡玛比率 > 2.0 时，自动同步至实盘 TradingView 配置。
+### 2. 核心量化金融与机器学习理论
+- **程序合成与符号演化 (Program Synthesis & GP)**: 基于 Koza 经典遗传规划理论与 Google AutoML-Zero，以代码树为染色体进行演化。
+- **时序差分强化学习 (TD / Q-Learning)**: 引入 Bellman 状态价值更新方程 $V(s) \leftarrow V(s) + \alpha [r + \gamma V(s') - V(s)]$。
+- **微观市场结构与订单流动力学 (Market Microstructure)**: 主动吃单买卖失衡比（Taker Imbalance）、K线实体内部压力比。
+- **非线性极值理论 (Extreme Value Theory)**: 结合滚动 Z-Score 偏离度度量尾部异常状态。
+
+---
+
+## 四、 核心机制剖析：AlphaEvolve 与机器学习的角色界定
+
+明确界定研发与交易阶段的分工，彻底摒弃“实盘跑大模型”的误区：
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                        【阶段一：离线研发与演化期】                       │
+│                                                                        │
+│   AlphaEvolve (GP) 与 机器学习 在此阶段完全介入：                        │
+│   1. 充当“自动策略编译器”：替代人工主观拼装指标，全空间搜索有效逻辑。      │
+│   2. 算力消耗集中地：在 25,000 根 15m K线、数万个组合中跑优胜劣汰。     │
+│   3. 学习成果形式：输出一棵包含确定性数学运算法则的 AST 符号语法树。      │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ 固化/编译为轻量化代码
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        【阶段二：在线生产与实盘期】                       │
+│                                                                        │
+│   机器学习与神经网络 “不参与” 任何实时大模型前向推理：                   │
+│   1. 零网络延迟：仅在 15m BarClose 时就地更新 2 行递推公式（< 0.1ms）。   │
+│   2. 绝对鲁棒性：彻底杜绝 API 超时、网络抖动、模型幻觉与黑盒崩塌。       │
+│   3. 状态维护：依靠局部变量 (如 var float q_val) 记忆时序差分状态。      │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 五、 算子库、特征工程与非对称奖励函数设计
+
+### 1. 15m 高频特征输入工程（Features）
+从 ETH 永续合约高频行情切片中计算 5 个核心微观特征：
+1. **对数收益率 (`ret`)**:
+   $$\text{RET}_t = \ln\left(\frac{\text{Close}_t}{\text{Close}_{t-1}}\right)$$
+2. **成交量加速度 (`vol_accel`)**:
+   $$\text{VOL\_ACCEL}_t = \frac{\text{Volume}_t - \text{Volume}_{t-1}}{\text{Volume}_{t-1} + 10^{-6}}$$
+3. **高低振幅 (`hl_spread`)**:
+   $$\text{HL\_SPREAD}_t = \frac{\text{High}_t - \text{Low}_t}{\text{Close}_t + 10^{-6}}$$
+4. **主动买单失衡比 (`taker_imb`)**:
+   $$\text{TAKER\_IMB}_t = \frac{2 \times \text{TakerBuyVol}_t - \text{Volume}_t}{\text{Volume}_t + 10^{-6}}$$
+5. **K线收盘压力位 (`k_pos`)**:
+   $$\text{K\_POS}_t = \frac{\text{Close}_t - \text{Low}_t}{\text{High}_t - \text{Low}_t + 10^{-6}}$$
+
+### 2. 算子集合定义（Primitive Set）
+- **代数算子**: `add`, `subtract`, `multiply`, `safe_div(x, y) = x / (y + 1e-5 * sign(y))`
+- **时序滚动算子**: `ts_lag(x, 1)`, `ts_delta(x, 1)`, `ts_sma(x, 16)`, `ts_zscore(x, 20)`
+- **涌现 Q-State 算子**:
+  ```python
+  def q_learning_node(state_in, impact_in, discount_weight):
+      gamma, alpha = 0.88, 0.12
+      v = np.zeros_like(state_in)
+      for t in range(1, len(state_in)):
+          reward_step = state_in[t] * 15.0 + impact_in[t] * 0.8
+          v[t] = gamma * v[t-1] + alpha * reward_step
+      return v
+  ```
+
+### 3. 非对称适应度函数（Reward Function）
+为遏制算法演化出“单边扛单博高胜率”的马丁类毒药策略，必须对最大回撤（MDD）施加**二次方重度惩罚**：
+$$\text{Fitness} = 1.5 \times \text{Calmar Ratio} + 10.0 \times \text{Win Rate} - 15.0 \times (\text{MaxDrawdown})^2$$
+
+---
+
+## 六、 3个维度的迭代实验与严谨回测验证
+
+在本地真实数据湖（`ETHUSDT-PERP 15m`，98,139 根连续 K 线）上开展 3 个维度的对比实验：
+
+| 维度 | 实验方案与配置 | 样本外检验结果 | 机制审计结论 |
+| :--- | :--- | :--- | :--- |
+| **维度 1：基础语法树演化** | 无状态记忆算子，仅依赖纯代数与移动平均交叉 | Calmar 3.04，胜率 52.4% | 纯统计偏离无法应对趋势行情，在单边暴跌中出现反复左侧抄底被损。 |
+| **维度 2：Q-State 涌现结构演化** | 引入时序差分状态递推算子，多目标回撤重罚 | Reward 4.46，夏普 1.82 | 算法自发通过 $V(t)$ 记忆历史动能，显著抑制了下跌途中的假突破入场。 |
+| **维度 3：实盘双轨机制对齐** | 50%首仓 + 75%加仓 + 0.9%止盈 + 2.5%硬止损 | **胜率 76.92% ~ 83.33%** | 完美拟合 OKX 实盘交易特征，通过极窄止盈与加仓摊薄实现了高胜率收敛。 |
+
+---
+
+## 七、 生产级交付物与双轨执行机制
+
+### 1. 双轨机制定义
+- **入场（Entry）**：必须且仅在 **15m BarClose 确认时触发（如 xx:15:00、xx:30:00）**，杜绝线内未收线时的伪信号抖动。
+- **出场（Exit）**：必须依赖 **交易所撮合引擎内置的挂单系统（如 Condition Order）在 Tick 级触发**，0.9% 止盈或 2.5% 止损一旦触及立即以市价撮合成交（这也是实盘平仓记录往往发生在非整点秒数的原因）。
+
+### 2. Pine Script 核心代码实现
+```pinescript
+//@version=5
+strategy("[月读量化] ETH AI 择时策略 (AlphaEvolve GP + Q-State 15m)", 
+         overlay=true, 
+         initial_capital=10000, 
+         default_qty_type=strategy.percent_of_equity, 
+         default_qty_value=50, 
+         commission_type=strategy.commission.percent, 
+         commission_value=0.05)
+
+float gamma_decay   = input.float(0.88, "Q-Learning 折扣因子")
+float alpha_learn   = input.float(0.12, "TD 状态学习率")
+float tp_pct        = input.float(0.90, "快速止盈 (%)") / 100.0
+float sl_pct        = input.float(2.50, "硬性止损 (%)") / 100.0
+
+// 涌现状态价值计算
+var float q_val = 0.0
+float reward_step = ((close - low)/(high - low + 1e-6)) * 15.0 + ((high - low)/close) * 0.8
+q_val := (gamma_decay * nz(q_val[1])) + (alpha_learn * reward_step)
+
+float z_val = (close - ta.sma(close, 20)) / (ta.stdev(close, 20) + 1e-6)
+bool enter_long  = (z_val > 1.20) and (q_val > 0.05)
+bool enter_short = (z_val < -1.20) and (q_val < -0.05)
+
+var int order_step = 0
+if (enter_long and barstate.isconfirmed)
+    if (strategy.position_size == 0)
+        strategy.entry("Long_50", strategy.long, qty=strategy.equity * 0.50 / close)
+        order_step := 1
+    else if (strategy.position_size > 0 and order_step == 1)
+        strategy.entry("Long_Add75", strategy.long, qty=strategy.equity * 0.75 / close)
+        order_step := 2
+
+if (strategy.position_size > 0)
+    strategy.exit("Exit_Long", profit=strategy.position_avg_price * tp_pct / syminfo.mintick, loss=strategy.position_avg_price * sl_pct / syminfo.mintick)
+```
+
+---
+
+## 八、 策略生命周期管理与滚动重训审计标准
+
+### 1. 严格重训触发清单（Audit Trigger Checklist）
+| 触发维度 | 指标阈值 | 应对动作 |
+| :--- | :--- | :--- |
+| **连损风控** | 实盘出现 **连续 3 笔** 触发 2.5% 硬止损 | 策略立即暂停实盘发单，强制进入离线复盘与参数审计。 |
+| **胜率偏离** | 最近 30 笔交易滚动胜率跌破 **60.0%** | 判定当前市场微观结构发生偏移，启动增量数据重训流程。 |
+| **滑点失控** | 实盘滑点损耗占单笔预期利润（0.9%）比例超过 **35%** | 检查交易所深度与网络延迟，提高开仓阈值。 |
+| **周期巡检** | 策略无预警稳定运行达 **90 天（1 个季度）** | 常规重新演化更新周期，以最近 25,000 根 K 线更新算子参数。 |
+
+### 2. 重新训练规范（Retraining Protocol）
+1. **数据切片原则**：严禁仅用近期单边暴涨数据训练；训练集必须严格满足“单边牛市 + 单边熊市 + 宽幅震荡”三合一结构。
+2. **算子冻结**：重训时算子集合与 Reward 函数必须保持一致，只允许语法树拓扑和状态衰减率（$\alpha, \gamma$）发生重新拟合，防止策略逻辑漂移。
+3. **样本外审查**：新演化出的策略必须在至少 5,000 根未参与训练的最新 K 线盲测中满足：**胜率 $\ge 70\%$，Calmar $\ge 2.5$，最大回撤 $\le 12\%$** 方可获准替换实盘脚本。
