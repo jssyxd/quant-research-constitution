@@ -155,9 +155,12 @@
 - 线内即时重算引擎、矩阵回测报告、code/。
 
 ### 20261020 — 工作流案例：ETH AI AlphaEvolve 符号演化与伪 Q-Learning 逆向投研 SOP
-- **目录**：`案例/20261020_工作流案例_ETH_AI_AlphaEvolve符号演化与伪Q-Learning逆向投研SOP/`
+- **目录**：`工作流案例_ETH_AI_AlphaEvolve符号演化与伪Q-Learning逆向投研SOP/`
 - 完整对话历史、SOP、双引擎审计报告。
 
+### 20261021 — 工作流案例：多智能体 Autoresearch 量化演化与被动 Maker 执行投研 SOP
+- **目录**：`20261021_工作流案例_多智能体Autoresearch量化演化与被动Maker执行SOP/`
+- NautilusTrader 4-Asset 事件驱动回测、贝叶斯狄利克雷证据门控 ($u \le 0.28, C \le 0.28$)、Maker 限价回踩执行红利 ($0.2884\times ATR$)、117 轮连续自动化演化实验、蒙特卡洛 10,000 次置乱、WFE=1.02、独立红队法医反幻觉审计。
 ---
 
 **使用本宪法的建议**  
