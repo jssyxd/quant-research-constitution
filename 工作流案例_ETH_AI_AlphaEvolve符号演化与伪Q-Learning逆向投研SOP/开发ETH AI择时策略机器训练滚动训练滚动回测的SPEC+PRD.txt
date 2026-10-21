@@ -223,9 +223,13 @@ $$V(t) = \gamma \cdot V(t-1) + \alpha \cdot R_{\text{step}}(t)$$
 ## 7. 动态滚动重训 (Walk-Forward Optimization, WFO) 核心引擎
 
 ### 7.1 WFO 滚动切片矩阵架构与 Purged & Embargoed 时序防泄漏隔离
-为彻底消除过拟合与标签时间重叠泄露，策略拒绝任何全样本全局优化，严格继承 **Robert E. Pardo (1992, 2008) 经典 Walk-Forward Analysis (WFA)** 理论基石，并升级融合机构级 **Purged & Embargoed Walk-Forward (P-WFO)** 架构进行动态参数与 AST 树演化：
+为彻底消除过拟合与标签时间重叠泄露，策略拒绝任何全样本全局优化，严格继承 **Robert E. Pardo (1992, 2008) 经典 Walk-Forward Analysis (WFA)** 理论基石，并升级融合机构级 **Purged & Embargoed Walk-Forward (P-WFO)** 与 **组合净化交叉验证 (Combinatorial Purged Cross-Validation, CPCV)** 架构进行动态参数与 AST 树演化：
 
 - **WFA 经典理论源起**：源自 Robert E. Pardo 著作 *The Evaluation and Optimization of Trading Strategies*，通过滚动时序窗口交替执行“样本内最优解搜索”与“严格非重叠样本外盲测”，是量化金融排除选择偏差（Selection Bias）的标准时间序列交叉验证范式。
+- **概念漂移解耦机制 (DoubleAdapt, arXiv:2306.09862v3)**：
+  金融市场非平稳数据流包含协变量偏移与条件分布偏移。单纯全量重训算力巨大，而天真增量微调易过拟合。系统借鉴 DoubleAdapt 双层优化理念，将微观概念漂移解耦为：
+  1. **数据自适应 (Data Adaptation)**：特征工程层通过滑动 Z-Score 与局部平稳化，将特征流映射至局部平稳空间；
+  2. **模型自适应 (Model Adaptation)**：依靠轻量概念漂移探测器与热启动参数更新，避免陷入劣质局部极值。
 - **训练切片窗口（In-Sample, IS）**：**25,000 根 15m K 线（约 260 天，8.5 个月）**，覆盖完整的牛熊转换与震荡区间。
 - **清除缓冲区（Purge Buffer）**：**20 根 15m K 线（5小时）**。物理清除 IS 与 OOS 交界处跨窗口的标签重叠与回撤记忆，彻底阻断自相关前向信息穿越。
 - **步进前瞻窗口（Out-of-Sample, OOS）**：**5,000 根 15m K 线（约 52 天，接近 2 个月）**，作为绝对物理隔离的盲测集。
@@ -249,17 +253,24 @@ $$\text{Fitness}(Tree) = 1.5 \cdot \text{Calmar}_{\text{IS}} + 10.0 \cdot \text{
 - **奥卡姆剃刀长度惩罚（$-\lambda \cdot \text{NodeCount}$，取 $\lambda=0.01$）**：
   对公式树节点数量进行线性惩罚。在收益等价的前提下，包含 10 个节点的公式树彻底淘汰包含 30 个节点的臃肿公式，从数学结构上杜绝代码膨胀（Code Bloat）。
 
-### 7.3 出厂四大准入门禁（Gatekeepers）与防过拟合检验 (DSR / PBO)
-任何在 IS 上演化出的最优个体，必须在绝对物理隔离的 5,000 根 OOS 盲测数据上接受**全自动机器准入质检**：
+### 7.3 出厂四大准入门禁（Gatekeepers）与统计防过拟合审查 (DSR / PBO / MinTRL)
+任何在 IS 上演化出的最优个体，必须在绝对物理隔离的 5,000 根 OOS 盲测数据上接受**全自动机器准入质检**。系统贯彻**默认失败关闭（Fail-Closed）**安全准则——任何统计指标缺失或异常，判定直接不合格：
+
 1. **OOS 平仓胜率**：$\text{WinRate}_{\text{OOS}} \ge 75.0\%$，且平仓交易笔数 $\ge 15$ 笔。
 2. **OOS 盈亏比与卡尔玛**：$\text{PF}_{\text{OOS}} \ge 1.25$ 或 $\text{Calmar}_{\text{OOS}} \ge 2.50$。
 3. **OOS 最大历史回撤**：$\text{MaxDrawdown}_{\text{OOS}} \le 12.0\%$。
-4. **统计防过拟合三重防御 (WFE / DSR / PBO)**：
+4. **统计防过拟合与稳健性认证 (WFE / DSR / PBO / MinTRL)**（arXiv:2608.23808v2, arXiv:2609.35359v1）：
    - **Walk-Forward 效率比率 (WFE)**：
      $$\text{WFE} = \frac{\text{Sharpe}_{\text{OOS}}}{\text{Sharpe}_{\text{IS}}} \ge 70.0\%$$
-   - **减水夏普比率 (Deflated Sharpe Ratio, DSR)**（Bailey & López de Prado, 2014）：
-     对多重测试假发现偏差（Selection Bias across $K$ trials）以及收益率非正态偏度 $\widehat{\gamma}_3$ 与峰度 $\widehat{\gamma}_4$ 进行统计惩罚，要求：
+   - **有效独立试验数解耦 ($K_{eff}$)**：
+     避免将相关参数候选视作独立试验，通过特征值分解计算有效独立试验数 $K_{eff} = \frac{(\sum \lambda_i)^2}{\sum \lambda_i^2}$。
+   - **紧缩夏普比率 (Deflated Sharpe Ratio, DSR)**（Bailey & López de Prado, 2014）：
+     对多重测试选择偏差（基于 $K_{eff}$）以及收益率非正态偏度 $\widehat{\gamma}_3$ 与峰度 $\widehat{\gamma}_4$ 进行统计惩罚，严格要求：
      $$\text{DSR} = \Phi \left( \frac{(\widehat{SR} - SR^*) \sqrt{N - 1}}{\sqrt{1 - \widehat{\gamma}_3 \widehat{SR} + \frac{\widehat{\gamma}_4 - 1}{4} \widehat{SR}^2}} \right) \ge 0.90$$
+     *(实证警示：arXiv:2609.35359v1 证实，在 901 个候选搜索中夏普 0.28 但 DSR 仅 0.423 的策略，在 2023+ 样本外因宏观机制漂移彻底失效，证明未经 DSR 校准的高夏普纯属“搜索运气”)*。
+   - **最小跟踪记录长度 (Minimum Track Record Length, MinTRL)**：
+     要求实际回测样本长度 $T$ 必须超过让观测夏普在统计上显著异于零所需的理论最短观测期：
+     $$\text{MinTRL} = 1 + \left[ 1 - \widehat{\gamma}_3 \widehat{SR} + \frac{\widehat{\gamma}_4 - 1}{4} \widehat{SR}^2 \right] \left( \frac{z_\alpha}{\widehat{SR}} \right)^2 \le T_{\text{actual}}$$
    - **回测过拟合概率 (Probability of Backtest Overfitting, PBO)**：
      组合对称交叉验证（CSCV）下，IS 优选模型在 OOS 表现劣于中位数的概率必须满足：
      $$\text{PBO} \le 15.0\%$$
