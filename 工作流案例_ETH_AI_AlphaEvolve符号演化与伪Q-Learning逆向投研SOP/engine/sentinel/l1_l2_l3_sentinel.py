@@ -1,16 +1,75 @@
 """
 Institutional Three-Tier AI Sentinel Surveillance System (SPEC Section 9).
-Enhanced with Deep Research Continuous Training (CT) and Statistical Drift Testing:
+Enhanced with Deep Research Concept Drift Detectors (arXiv:2103.14079v3 & Pardo WFA):
 L1: Microstructure Execution Health (Slippage, Latency, Fill Ratio)
 L2: Concept Drift & Market Regime Shift:
-    - 2-Sample Kolmogorov-Smirnov (K-S) statistical tests on operational vs baseline features
-    - Rolling Win-Rate & Drawdown degradation triggers
+    - Page-Hinkley (PH) Test: Real-time cumulative mean shift detection (O(1) complexity)
+    - KSWIN (Kolmogorov-Smirnov Sliding Window) drift detector
+    - Rolling Win-Rate & Peak Drawdown degradation triggers
 L3: Circuit Breaker & Hard Capital Defense (Reduce-Only mode, Webhook cutoff)
 """
 
 import numpy as np
 from scipy.stats import ks_2samp
 from typing import Dict, Any, List, Optional
+
+class PageHinkleyDriftDetector:
+    """
+    Page-Hinkley (PH) Test for abrupt change detection in financial streams.
+    Reference: arXiv:2103.14079v3
+    """
+    def __init__(self, delta: float = 0.005, threshold: float = 50.0, alpha: float = 0.99):
+        self.delta = delta
+        self.threshold = threshold
+        self.alpha = alpha
+        self.reset()
+
+    def reset(self):
+        self.mean = 0.0
+        self.count = 0
+        self.cumulative_sum = 0.0
+        self.min_cumulative_sum = 0.0
+
+    def update(self, x: float) -> bool:
+        """
+        Updates detector with a new value (e.g. prediction error or feature value).
+        Returns True if concept drift is detected.
+        """
+        self.count += 1
+        self.mean = self.mean + (x - self.mean) / self.count
+        self.cumulative_sum = self.alpha * self.cumulative_sum + (x - self.mean - self.delta)
+        if self.cumulative_sum < self.min_cumulative_sum:
+            self.min_cumulative_sum = self.cumulative_sum
+            
+        ph_stat = self.cumulative_sum - self.min_cumulative_sum
+        if ph_stat > self.threshold:
+            self.reset()
+            return True
+        return False
+
+class KSWINDriftDetector:
+    """
+    KSWIN (Kolmogorov-Smirnov Sliding Window) Concept Drift Detector.
+    Reference: arXiv:2103.14079v3
+    """
+    def __init__(self, window_size: int = 100, stat_size: int = 30, alpha: float = 0.01):
+        self.window_size = window_size
+        self.stat_size = stat_size
+        self.alpha = alpha
+        self.window = []
+
+    def update(self, val: float) -> bool:
+        self.window.append(val)
+        if len(self.window) > self.window_size:
+            self.window.pop(0)
+            
+        if len(self.window) == self.window_size:
+            r_samples = self.window[-self.stat_size:]
+            w_samples = self.window[:-self.stat_size]
+            stat, p_val = ks_2samp(w_samples, r_samples)
+            if p_val < self.alpha:
+                return True
+        return False
 
 class L1ExecutionSentinel:
     def __init__(self, max_slippage_bps: float = 3.0, max_consecutive_slippage_violations: int = 3):
@@ -43,6 +102,8 @@ class L2DriftSentinel:
         self.min_rolling_win_rate = min_rolling_win_rate
         self.max_rolling_drawdown = max_rolling_drawdown
         self.ks_p_value_threshold = ks_p_value_threshold
+        self.ph_detector = PageHinkleyDriftDetector(delta=0.01, threshold=25.0)
+        self.kswin_detector = KSWINDriftDetector(window_size=100, stat_size=30, alpha=ks_p_value_threshold)
 
     def check_distribution_drift(
         self,

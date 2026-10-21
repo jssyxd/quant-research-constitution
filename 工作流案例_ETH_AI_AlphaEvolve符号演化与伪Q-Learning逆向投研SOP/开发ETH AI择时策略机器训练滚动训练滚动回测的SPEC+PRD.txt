@@ -223,8 +223,9 @@ $$V(t) = \gamma \cdot V(t-1) + \alpha \cdot R_{\text{step}}(t)$$
 ## 7. 动态滚动重训 (Walk-Forward Optimization, WFO) 核心引擎
 
 ### 7.1 WFO 滚动切片矩阵架构与 Purged & Embargoed 时序防泄漏隔离
-为彻底消除过拟合与标签时间重叠泄露，策略拒绝任何全样本全局优化，严格基于机构级 **Purged Walk-Forward (P-WFO)** 架构进行动态参数与 AST 树演化：
+为彻底消除过拟合与标签时间重叠泄露，策略拒绝任何全样本全局优化，严格继承 **Robert E. Pardo (1992, 2008) 经典 Walk-Forward Analysis (WFA)** 理论基石，并升级融合机构级 **Purged & Embargoed Walk-Forward (P-WFO)** 架构进行动态参数与 AST 树演化：
 
+- **WFA 经典理论源起**：源自 Robert E. Pardo 著作 *The Evaluation and Optimization of Trading Strategies*，通过滚动时序窗口交替执行“样本内最优解搜索”与“严格非重叠样本外盲测”，是量化金融排除选择偏差（Selection Bias）的标准时间序列交叉验证范式。
 - **训练切片窗口（In-Sample, IS）**：**25,000 根 15m K 线（约 260 天，8.5 个月）**，覆盖完整的牛熊转换与震荡区间。
 - **清除缓冲区（Purge Buffer）**：**20 根 15m K 线（5小时）**。物理清除 IS 与 OOS 交界处跨窗口的标签重叠与回撤记忆，彻底阻断自相关前向信息穿越。
 - **步进前瞻窗口（Out-of-Sample, OOS）**：**5,000 根 15m K 线（约 52 天，接近 2 个月）**，作为绝对物理隔离的盲测集。
@@ -380,6 +381,12 @@ stateDiagram-v2
   监控从 BarClose 事件产生到订单回报 ACK 的往返延迟（Round-trip Latency）。若延迟 $> 800\text{ ms}$，记录异常日志并告警。
 
 ### 9.2 L2 因子与概念漂移层（Concept Drift & Market Regime Shift）
+- **流式概念漂移探测器集群 (Concept Drift Detectors, arXiv:2103.14079v3)**：
+  金融流式数据具有非平稳性。根据前沿量化研究，轻量化概念漂移检测器的算力消耗仅为盲目持续重训（Continuous Retraining）的一小部分。系统集成双重流式检测算子：
+  1. **Page-Hinkley (PH) 阶跃均值漂移测试**：
+     通过 $O(1)$ 时间与内存复杂度持续累加单步收益差分 $U_t = \sum (x_i - \bar{x}_t - \delta)$，一旦 $PH_t = U_t - \min U_i > \lambda$ 触发累积偏移警报，精准捕捉波段突发转向。
+  2. **KSWIN 滑动窗口漂移测试**：
+     维持滚动窗口 $W=100$，对最近 30 根 Bar 的微观因子与前 70 根 Bar 执行双样本 K-S 拟合优度检验，当统计量显著性 $p < 0.01$ 时判定分布发生机制性跃迁。
 - **双样本柯尔莫哥洛夫-斯米尔诺夫检验 (Two-Sample K-S Statistical Drift Test)**：
   在 MLOps 持续训练 (Continuous Training, CT) 范式下，系统通过对过去 200 根运行期 K 线的特征分布（如 Rolling Z-Score, Parkinson 波动率）与 In-Sample 基准特征分布执行双样本 K-S 显著性检验：
   $$D_{n, m} = \sup_x |F_{1, n}(x) - F_{2, m}(x)|$$
