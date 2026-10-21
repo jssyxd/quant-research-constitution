@@ -158,9 +158,9 @@
 - **目录**：`工作流案例_ETH_AI_AlphaEvolve符号演化与伪Q-Learning逆向投研SOP/`
 - 完整对话历史、SOP、双引擎审计报告。
 
-### 20261021 — 工作流案例：多智能体 Autoresearch 量化演化与被动 Maker 执行投研 SOP
+### 20261021 — 工作流案例：基于 OMP Autoresearch Loop 自动化量化演化与被动 Maker 执行投研 SOP
 - **目录**：`20261021_工作流案例_多智能体Autoresearch量化演化与被动Maker执行SOP/`
-- NautilusTrader 4-Asset 事件驱动回测、贝叶斯狄利克雷证据门控 ($u \le 0.28, C \le 0.28$)、Maker 限价回踩执行红利 ($0.2884\times ATR$)、117 轮连续自动化演化实验、蒙特卡洛 10,000 次置乱、WFE=1.02、独立红队法医反幻觉审计。
+- **核心内容**：OMP Autoresearch Loop 安装配置与极简模板、防背历史答案与奥卡姆剃刀精简四项基本法、NautilusTrader 4-Asset 事件驱动回测、贝叶斯狄利克雷证据门控 ($u \le 0.28, C \le 0.28$)、Maker 限价回踩执行红利 ($0.2884\times ATR$)、134 轮连续自动化演化实验与奥卡姆剪枝实录、蒙特卡洛 10,000 次置乱、WFE=1.02、独立红队法医反幻觉审计。
 ---
 
 **使用本宪法的建议**  

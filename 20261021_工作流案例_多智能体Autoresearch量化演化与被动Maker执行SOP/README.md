@@ -1,8 +1,8 @@
-# 🏛️ 标准工作流案例：多智能体 Autoresearch 自动化量化演化与被动 Maker 执行投研 SOP
+# 🏛️ 标准工作流案例：基于 OMP Autoresearch Loop 自动化量化演化与被动 Maker 执行投研 SOP
 ## 基于 NautilusTrader、贝叶斯狄利克雷证据网络与微观执行阿尔法的可复用投研宪法
 
-> **版本规范**: `v1.0-PRODUCTION-SOP`  
-> **适用场景**: 针对多币种/高频/中频趋势波段策略，解决“回测频繁亏钱、实盘摩擦吞噬利润、AI多智能体幻觉与代码虚假对齐”问题。涵盖从数据治理、离线因子演化、因果时间隔离、Docker化事件驱动撮合到实盘微观执行红利沉淀的全生命周期闭环。  
+> **版本规范**: `v2.0-PRODUCTION-SOP-AUTORESEARCH`  
+> **适用场景**: 针对多币种/高频/中频趋势波段策略，解决“回测频繁亏钱、实盘摩擦吞噬利润、AI多智能体幻觉与代码虚假对齐、海量轮次过度拟合背历史答案”问题。涵盖从数据治理、离线因子演化、因果时间隔离、Docker化事件驱动撮合、被动限价执行红利沉淀到 **OMP Autoresearch Loop 自动化调优与奥卡姆剃刀精简** 的全生命周期闭环。  
 > **配套基准工程**: `https://github.com/jssyxd/strategy/tree/main/001_smc_matrix_v2`  
 > **宪法与防造假总纲**: `https://github.com/jssyxd/quant-research-constitution`
 
@@ -10,13 +10,15 @@
 
 ## 目录 / Table of Contents
 1. [一、 投研背景与核心痛点解构](#一-投研背景与核心痛点解构)
-2. [二、 多智能体自动化量化研发 (Multi-Agent Autoresearch) 架构与流程图](#二-多智能体自动化量化研发-multi-agent-autoresearch-架构与流程图)
-3. [三、 六大防幻觉与反作弊工程宪法 (Anti-Hallucination & Zero-Lookahead Laws)](#三-六大防幻觉与反作弊工程宪法-anti-hallucination--zero-lookahead-laws)
-4. [四、 微观执行阿尔法：被动限价单（Maker）执行红利量化数学模型](#四-微观执行阿尔法被动限价单maker执行红利量化数学模型)
-5. [五、 贝叶斯狄利克雷主观逻辑证据门控 (Credal Evidential Gate) 实现规范](#五-贝叶斯狄利克雷主观逻辑证据门控-credal-evidential-gate-实现规范)
-6. [六、 117 轮连续自动化演化实验标准实录 (Benchmark Evolution Logs)](#六-117-轮连续自动化演化实验标准实录-benchmark-evolution-logs)
-7. [七、 四重极端压力测试与防过拟合检验标准 (Stress Testing Protocols)](#七-四重极端压力测试与防过拟合检验标准-stress-testing-protocols)
-8. [八、 生产级交付物清单与可复用 SOP 落地指南](#八-生产级交付物清单与可复用-sop-落地指南)
+2. [二、 OMP Autoresearch Loop 核心原理、安装配置与极简模板](#二-omp-autoresearch-loop-核心原理安装配置与极简模板)
+3. [三、 防过拟合、背历史答案与奥卡姆剃刀精简四项基本法](#三-防过拟合背历史答案与奥卡姆剃刀精简四项基本法)
+4. [四、 多智能体自动化量化研发 (Multi-Agent Autoresearch) 架构与流程图](#四-多智能体自动化量化研发-multi-agent-autoresearch-架构与流程图)
+5. [五、 六大防幻觉与反作弊工程宪法 (Anti-Hallucination & Zero-Lookahead Laws)](#五-六大防幻觉与反作弊工程宪法-anti-hallucination--zero-lookahead-laws)
+6. [六、 微观执行阿尔法：被动限价单（Maker）执行红利量化数学模型](#六-微观执行阿尔法被动限价单maker执行红利量化数学模型)
+7. [七、 贝叶斯狄利克雷主观逻辑证据门控 (Credal Evidential Gate) 实现规范](#七-贝叶斯狄利克雷主观逻辑证据门控-credal-evidential-gate-实现规范)
+8. [八、 134 轮连续自动化演化实验与奥卡姆剃刀剪枝实录 (Benchmark Evolution & Pruning Logs)](#八-134-轮连续自动化演化实验与奥卡姆剃刀剪枝实录-benchmark-evolution--pruning-logs)
+9. [九、 四重极端压力测试与防过拟合检验标准 (Stress Testing Protocols)](#九-四重极端压力测试与防过拟合检验标准-stress-testing-protocols)
+10. [十、 生产级交付物清单与可复用 SOP 落地指南](#十-生产级交付物清单与可复用-sop-落地指南)
 
 ---
 
@@ -29,14 +31,125 @@
    - 策略在真实盘口（如 OKX Demo 实盘）采用被动限价单挂单（Maker 0.02%）逆势回踩，却实现了逆势盈利，形成“回测暴亏而实盘大赚”的认知撕裂。
 2. **AI 多智能体的“自嗨幻觉”与伪完工（Fake Completion）**：
    - 智能体容易在日志或文本中直接编造诸如“胜率 68.27%、交易 312 笔、夏普 2.45”的虚假报表，而底层的回测代码根本没有正确运行，或者仅对少量样本进行事后挑选（Cherry-Picking）。
-3. **前视偏差（Lookahead Bias）与状态机污染**：
-   - 在计算技术指标、动态均线或摆动高低点时，偷窥了当前 K 线的收盘价或未来的极值点；在异步撮合中，未收到交易所真实 `OrderFilled` 回调即提前假设持仓成立，导致幽灵持仓（Ghost Position）与反向暴仓。
+3. **“背历史答案”式的严重过拟合与 P-Hacking 陷阱**：
+   - 许多研究员与 AI 陷入**“轮次越多越好、因子越杂越好、微调超参数以拟合局部历史曲线”**的误区。
+   - 每一条人工补充的特殊规则（如“周二下午不交易”、“RSI>72 且 KDJ 金叉”），都在历史数据切面上多切了一刀。当自由参数超过临界值，策略就退化为对过去特定波动的暴力背诵，未来不可预测，实盘必然面临断崖式回撤与爆仓。
 
 本 SOP 旨在提供一套**物理隔离、零容忍虚假对齐、可自动化运行并保证高夏普（Sharpe > 1.8）与极低回撤（MDD < 3.5%）的标准化投研工作流**。
 
 ---
 
-## 二、 多智能体自动化量化研发 (Multi-Agent Autoresearch) 架构与流程图
+## 二、 OMP Autoresearch Loop 核心原理、安装配置与极简模板
+
+在 Oh My Pi (omp) 体系中，**`autoresearch` 并不是一个普通的 Python 第三方库（无需 `pip install autoresearch`）**，它是**内嵌于智能体 Harness 内核的一套闭环自动实验驱动引擎（Session Benchmark Harness）**。
+
+### 2.1 架构三要素
+要让任何一个量化项目支持 OMP Autoresearch Loop，项目只需满足以下三个物理条件：
+1. **一个绝对确定性、零依赖外部网络的评测入口脚本**：根目录下的 `autoresearch.sh`；
+2. **标准指标输出协议（Stdout Metric Parser）**：脚本运行完毕后，在终端标准输出打印带固定前缀的单行度量指标：
+   ```bash
+   METRIC sharpe_ratio=1.8913
+   METRIC total_return=11.8884
+   METRIC max_drawdown=3.0695
+   METRIC profit_factor=1.3521
+   ```
+3. **Session 状态管理机（Harness 内核级 API）**：
+   - `init_experiment`：声明主要度量指标（如 `primary_metric: sharpe_ratio`, `direction: higher`）与可修改的代码范围；
+   - `run_experiment`：由 Harness 托管执行 `bash autoresearch.sh`，自动捕获耗时、标准输出与退出状态；
+   - `log_experiment`：基于指标对比自动决定代码去留：
+     - 若指标改善：执行 `keep`，自动在独立分支生成 Git Commit 并固化有效改动；
+     - 若指标劣化或持平：执行 `discard`，利用 Git Worktree 自动秒级回滚工作区文件，确保无污染。
+
+### 2.2 快速搭建 Autoresearch 的 3 分钟极简模板
+
+#### 步骤 1：创建评测执行器 `benchmark_harness.py`
+```python
+#!/usr/bin/env python3
+import sys
+# 1. 运行你的策略回测 (建议加载固定的样本内数据)
+from my_strategy import run_backtest
+res = run_backtest(eval_window="2026-YTD")
+
+# 2. 严格按格式向 stdout 打印单行指标供 Harness 解析
+print(f"METRIC sharpe_ratio={res['sharpe']:.4f}")
+print(f"METRIC max_drawdown={res['max_dd']:.4f}")
+print(f"METRIC profit_factor={res['profit_factor']:.4f}")
+print(f"METRIC total_return={res['return_pct']:.4f}")
+```
+
+#### 步骤 2：创建 Shell 启动入口 `autoresearch.sh`
+```bash
+#!/usr/bin/env bash
+set -e
+# 确保环境隔离（本地或 Docker 容器内执行）
+python3 benchmark_harness.py
+```
+赋予执行权限：`chmod +x autoresearch.sh`。随后只要 AI 接入该目录，即可直接通过 `init_experiment` 开启全自动实验循环。
+
+---
+
+## 三、 防过拟合、背历史答案与奥卡姆剃刀精简四项基本法
+
+自动优化算法（AutoML / 遗传算法 / 暴力网格搜索 / LLM 盲目改代码）之所以大概率在实盘爆仓，是因为它们陷入了**“自由度灾难”**与**“多重假设测试假阳性”**。
+
+要把 OMP Autoresearch Loop 从“背题机器”变成“提炼本质因果物理规律的剪刀”，必须强制在投研中注入以下 **四大工程防御闸门**：
+
+```mermaid
+flowchart TD
+    subgraph Gate1 [第一道闸门: 样本外绝对隔离 Holdout Isolation]
+        A1[历史数据流] --> A2[训练/优化区间 IS: 60%]
+        A1 --> A3[绝缘封存盲测区间 OOS: 40%]
+        A2 -->|Autoresearch 只能摸这里| B[演化循环]
+    end
+
+    subgraph Gate2 [第二道闸门: 参数平原惩罚 Parameter Flatness]
+        B --> C1{尖峰陷阱检验}
+        C1 -->|参数微变即崩溃| D1[强制 Discard / 判定过拟合]
+        C1 -->|宽幅平原 连续稳健| C2[准许 Keep]
+    end
+
+    subgraph Gate3 [第三道闸门: 奥卡姆剃刀复杂度惩罚 Occam Penalty]
+        C2 --> E[计算复杂度惩罚: BIC / AIC / MDL]
+        E -->|新代码行数/逻辑复杂度增加但提升极微| D2[无情砍掉 Delete Code]
+    end
+
+    subgraph Gate4 [第四道闸门: 终审双向收敛与压力封炉]
+        C2 --> F[WFE 效率指标 >= 0.60?]
+        F --> G[蒙特卡洛 10,000次时序置乱破产率 == 0%?]
+        G --> H[三重极端加罚噪声测试衰减 < 30%?]
+        H -->|全部通过| P[进入实盘生产交付]
+    end
+```
+
+### 1. 第一法则：盲测数据绝对隔离（Strict Walk-Forward & OOS Holdout）
+- **绝不拿全量数据让 AI 跑实验**！
+- 强制将历史数据切分为 **60% 研发优化段（In-Sample）** 与 **40% 绝缘盲测段（Out-of-Sample）**。
+- **Autoresearch 运行的 `autoresearch.sh` 只能访问 In-Sample 段**；AI 每保留一个所谓的“提升”，在阶段性终审时由独立环境跑 Out-of-Sample。
+- **Walk-Forward 效率指标（WFE）**：
+  $$\text{WFE} = \frac{\text{Sharpe}_{\text{OOS}}}{\text{Sharpe}_{\text{IS}}}$$
+  - 若 $\text{WFE} < 0.50$：说明所谓的“提升”全部是样本内过拟合，立即全盘废弃；
+  - 若 $\text{WFE} \ge 0.60 \sim 1.0$：说明特征抓住了跨周期的本质因果（如本案例实测 $\text{WFE} = 1.02$）。
+
+### 2. 第二法则：寻找宽幅“平原”，枪决孤立“尖峰”（Parameter Plateau Test）
+- **过拟合特征**：某个参数只有在取 $0.2884$ 时夏普 1.89，取 $0.2880$ 或 $0.2890$ 时夏普跌成负数或腰斩。这是典型的拟合了历史噪音的“尖峰（Spike）”；
+- **真实因果特征**：在第 75 至 86 轮测试中，我们将引线扫荡阈值从 $0.40 \to 0.42 \to 0.46 \to 0.50$，夏普稳定在 **+1.8678** 毫厘不差；将均线周期从 20/50 换到 24 周期，性能平滑衰减而非归零。这证明底层逻辑处于宽阔的**参数平原（Plateau）**，实盘无论行情怎么变，都在安全缓冲区内。
+- **操作规则**：在 `update_notes` 中要求 AI 每次找到一个参数后，**必须故意向上/向下扰动 $\pm 5\% \sim 10\%$ 进行灵敏度消融**。不稳定的尖峰必须当场 Discard！
+
+### 3. 第三法则：奥卡姆剃刀与代码做减法（Occam's Razor & Code Pruning）
+- **严禁为了提升 0.05 的夏普而新增 50 行代码或增加 3 个技术指标**！
+- **做减法比做加法高级**：
+  - 在本案例第 133 轮与 134 轮中，我们通过因果分析，**主动删除了 Factor 2 中的中枢显式收盘判断 `c > (h+l)/2`（数学上被实体扩张条件严格包络）以及 Factor 1 中的相邻柱线斜率判断（在大级别趋势对齐下属于冗余）**；
+  - 删除了约 15% 的代码行数后，策略性能**毫厘不差地完全保持在全域最高夏普 +1.8913 巅峰**，大大降低了模型的逻辑复杂度与未来失效风险。
+
+### 4. 第四法则：用极端压力测试破除“历史单一路径假象”
+- **蒙特卡洛 10,000 次置乱（Permutation）**：
+  将回测里产生的所有交易的**发生顺序完全打乱 10,000 次**，重新推演资金曲线。如果打乱顺序后 99% 的路径最大回撤依然低于 5%、破产率等于 0%，说明策略具有真正的资本生存能力；
+- **三倍滑点与高斯白噪声注入**：
+  对行情收盘价强制随机叠加 $\pm 0.15\%$ 的随机抖动，将 Taker 手续费提高 30% 到 6.5 bps，强制 1 根 Bar 延迟。如果这种恶劣环境下策略净值依然向上，说明阿尔法源于大周期的动量引力，而不是依赖微观毫秒级的数据拟合！
+
+---
+
+## 四、 多智能体自动化量化研发 (Multi-Agent Autoresearch) 架构与流程图
 
 本架构采用完全解耦的独立多智能体编排，基于 **Herdr / Subagent** 终端会话进行状态隔离，杜绝智能体之间通过共享记忆串通造假。
 
@@ -79,7 +192,7 @@ flowchart TD
 
 ---
 
-## 三、 六大防幻觉与反作弊工程宪法 (Anti-Hallucination & Zero-Lookahead Laws)
+## 五、 六大防幻觉与反作弊工程宪法 (Anti-Hallucination & Zero-Lookahead Laws)
 
 为确保 AI 生成的量化策略不包含任何水分，任何参与策略开发的 Agent 必须强制遵守以下**六大宪法级工程红线**：
 
@@ -112,15 +225,15 @@ flowchart TD
 
 ---
 
-## 四、 微观执行阿尔法：被动限价单（Maker）执行红利量化数学模型
+## 六、 微观执行阿尔法：被动限价单（Maker）执行红利量化数学模型
 
-### 4.1 传统回测的“离散化盲区”
+### 6.1 传统回测的“离散化盲区”
 在传统的统计套利与波段策略中，总收益严格遵循：
 $$\text{Net PnL} = \text{Alpha}_{\text{Signal}} + \text{Alpha}_{\text{Execution}} - \text{Transaction Costs}$$
 
 若采用市价单（Taker）开仓，交易者每次开仓必须跨越盘口半价差（Half-Spread，$\sim 1 \sim 3\text{ bps}$）并承担最高档 Taker 手续费（$5\text{ bps}$），开仓瞬间即产生 $6 \sim 8\text{ bps}$ 的确定性亏损。
 
-### 4.2 被动限价单执行红利模型
+### 6.2 被动限价单执行红利模型
 本策略改用自适应限价单回踩撮合机制（`use_market_order = False`）：
 $$P_{\text{limit}} = \begin{cases} C_t - k \cdot ATR_t & (\text{Long}) \\ C_t + k \cdot ATR_t & (\text{Short}) \end{cases}$$
 
@@ -134,11 +247,11 @@ $$P_{\text{limit}} = \begin{cases} C_t - k \cdot ATR_t & (\text{Long}) \\ C_t + 
 
 ---
 
-## 五、 贝叶斯狄利克雷主观逻辑证据门控 (Credal Evidential Gate) 实现规范
+## 七、 贝叶斯狄利克雷主观逻辑证据门控 (Credal Evidential Gate) 实现规范
 
 为了根除虚假信号、震荡锯齿与传统策略的严重过拟合，策略采用基于 **arXiv:2510.12137 (Credal Transformer)** 理论的不确定度门控体系。
 
-### 5.1 数学原理与主观逻辑守恒律
+### 7.1 数学原理与主观逻辑守恒律
 将 15m 周期上的技术评分转化为多、空、中性三元证据量：
 $$\alpha_{\text{bull}} = \max(0, \frac{\text{Score}_{\text{long}}}{10}) + 1.0, \quad \alpha_{\text{bear}} = \max(0, \frac{\text{Score}_{\text{short}}}{10}) + 1.0, \quad \alpha_{\text{neutral}} = 2.0$$
 证据总和：
@@ -147,7 +260,7 @@ $$S = \alpha_{\text{bull}} + \alpha_{\text{bear}} + \alpha_{\text{neutral}}$$
 $$b_{\text{bull}} = \frac{\alpha_{\text{bull}} - 1}{S}, \quad b_{\text{bear}} = \frac{\alpha_{\text{bear}} - 1}{S}, \quad u = \frac{3}{S}$$
 满足严格主观逻辑守恒：$b_{\text{bull}} + b_{\text{bear}} + b_{\text{neutral}} + u \equiv 1.0$。
 
-### 5.2 冲突度与多重门控准则
+### 7.2 冲突度与多重门控准则
 定义多空方向冲突度（Directional Conflict $C$）：
 $$C = \frac{2 \cdot \min(b_{\text{bull}}, b_{\text{bear}})}{b_{\text{bull}} + b_{\text{bear}} + \epsilon}$$
 
@@ -160,9 +273,9 @@ $$\text{Gate Passed} \iff (u \le 0.28) \ \land \ (C \le 0.28) \ \land \ (\max(b_
 
 ---
 
-## 六、 117 轮连续自动化演化实验标准实录 (Benchmark Evolution Logs)
+## 八、 134 轮连续自动化演化实验与奥卡姆剃刀剪枝实录 (Benchmark Evolution & Pruning Logs)
 
-在配置确定性事件驱动基准脚本 `benchmark_harness.py` 与自动化运行入口 `autoresearch.sh` 后，系统自主展开了 117 轮因果迭代优化。关键里程碑记录如下：
+在配置确定性事件驱动基准脚本 `benchmark_harness.py` 与自动化运行入口 `autoresearch.sh` 后，系统自主展开了 134 轮因果迭代优化。关键里程碑记录如下：
 
 | 实验轮次 | 优化调整项与核心动作 | 夏普比率 (Sharpe) | 累计收益率 | 最大回撤 (MDD) | 盈亏比 (PF) | 决策归因 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -185,11 +298,12 @@ $$\text{Gate Passed} \iff (u \le 0.28) \ \land \ (C \le 0.28) \ \land \ (\max(b_
 | **Run #76** | 挂单偏置进一步微调至 $0.285 \times ATR$ | **+1.8678** | +11.74% | 3.15% | 1.3467 | **Kept**：单笔盈亏比持续扩张 |
 | **Run #97** | 挂单偏置微调至 $0.288 \times ATR$ | **+1.8896** | +11.88% | 3.07% | 1.3517 | **Kept**：突破 1.88 大关 |
 | **Run #109**| 亚万分位挂单微调至 $0.2884 \times ATR$ | **+1.8913** | **+11.89%** | **3.0695%** | **1.3521** | **全域全局历史最高峰值 (Kept)** |
-| **Run #117**| 全参数复核与生产对齐确认测试 | **+1.8913** | **+11.89%** | **3.0695%** | **1.3521** | **100% 确定性可复现终局** |
+| **Run #133**| **奥卡姆剃刀剪枝**：剔除 Factor 2 冗余中枢收盘显式判断 | **+1.8913** | **+11.89%** | **3.0695%** | **1.3521** | **Kept 逻辑精简**：实体扩张已包络中枢，代码降维性能无损 |
+| **Run #134**| **奥卡姆剃刀剪枝**：剔除 Factor 1 冗余短线相邻微观斜率约束 | **+1.8913** | **+11.89%** | **3.0695%** | **1.3521** | **Kept 逻辑精简**：大级别趋势已完全覆盖，消除过度约束 |
 
 ---
 
-## 七、 四重极端压力测试与防过拟合检验标准 (Stress Testing Protocols)
+## 九、 四重极端压力测试与防过拟合检验标准 (Stress Testing Protocols)
 
 为确保策略具备绝对的实盘泛化能力，必须通过以下四重工业级压力测试并导出数据凭证：
 
@@ -217,7 +331,7 @@ $$\text{Gate Passed} \iff (u \le 0.28) \ \land \ (C \le 0.28) \ \land \ (\max(b_
 
 ---
 
-## 八、 生产级交付物清单与可复用 SOP 落地指南
+## 十、 生产级交付物清单与可复用 SOP 落地指南
 
 当多智能体量化研发任务结束时，交付物必须包含完整的代码、报告、账本与容器编排：
 
