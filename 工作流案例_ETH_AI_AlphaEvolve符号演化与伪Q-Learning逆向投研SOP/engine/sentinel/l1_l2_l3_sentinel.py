@@ -1,12 +1,16 @@
 """
 Institutional Three-Tier AI Sentinel Surveillance System (SPEC Section 9).
+Enhanced with Deep Research Continuous Training (CT) and Statistical Drift Testing:
 L1: Microstructure Execution Health (Slippage, Latency, Fill Ratio)
-L2: Concept Drift & Market Regime Shift (Rolling Wasserstein / KS distance, Win-rate degradation)
+L2: Concept Drift & Market Regime Shift:
+    - 2-Sample Kolmogorov-Smirnov (K-S) statistical tests on operational vs baseline features
+    - Rolling Win-Rate & Drawdown degradation triggers
 L3: Circuit Breaker & Hard Capital Defense (Reduce-Only mode, Webhook cutoff)
 """
 
 import numpy as np
-from typing import Dict, Any, List
+from scipy.stats import ks_2samp
+from typing import Dict, Any, List, Optional
 
 class L1ExecutionSentinel:
     def __init__(self, max_slippage_bps: float = 3.0, max_consecutive_slippage_violations: int = 3):
@@ -30,11 +34,39 @@ class L1ExecutionSentinel:
         }
 
 class L2DriftSentinel:
-    def __init__(self, min_rolling_win_rate: float = 0.65, max_rolling_drawdown: float = 0.08):
+    def __init__(
+        self,
+        min_rolling_win_rate: float = 0.65,
+        max_rolling_drawdown: float = 0.08,
+        ks_p_value_threshold: float = 0.01
+    ):
         self.min_rolling_win_rate = min_rolling_win_rate
         self.max_rolling_drawdown = max_rolling_drawdown
+        self.ks_p_value_threshold = ks_p_value_threshold
 
-    def check(self, rolling_pnl_list: List[float]) -> Dict[str, Any]:
+    def check_distribution_drift(
+        self,
+        baseline_features: np.ndarray,
+        operational_features: np.ndarray
+    ) -> Dict[str, Any]:
+        """
+        Runs 2-Sample Kolmogorov-Smirnov test to detect feature distribution shifts.
+        """
+        ks_stat, p_val = ks_2samp(baseline_features, operational_features)
+        drift_detected = p_val < self.ks_p_value_threshold
+        return {
+            'ks_statistic': float(ks_stat),
+            'p_value': float(p_val),
+            'drift_detected': bool(drift_detected),
+            'status': 'DRIFT_ALERT_ORANGE' if drift_detected else 'DISTRIBUTION_STABLE_GREEN'
+        }
+
+    def check(
+        self,
+        rolling_pnl_list: List[float],
+        baseline_features: Optional[np.ndarray] = None,
+        operational_features: Optional[np.ndarray] = None
+    ) -> Dict[str, Any]:
         if len(rolling_pnl_list) < 10:
             return {'level': 'L2', 'status': 'WARMING_UP'}
             
@@ -47,12 +79,23 @@ class L2DriftSentinel:
         dd = (peak - equity) / (np.maximum(peak, 1.0))
         max_dd = float(np.max(dd)) if len(dd) > 0 else 0.0
 
-        trigger_retrain = (win_rate < self.min_rolling_win_rate) or (max_dd > self.max_rolling_drawdown)
+        perf_trigger = (win_rate < self.min_rolling_win_rate) or (max_dd > self.max_rolling_drawdown)
+        
+        drift_info = None
+        if baseline_features is not None and operational_features is not None:
+            drift_info = self.check_distribution_drift(baseline_features, operational_features)
+            ks_trigger = drift_info['drift_detected']
+        else:
+            ks_trigger = False
+
+        trigger_retrain = perf_trigger or ks_trigger
+
         return {
             'level': 'L2',
             'rolling_win_rate': win_rate,
             'rolling_max_dd': max_dd,
-            'trigger_retrain': trigger_retrain,
+            'feature_drift': drift_info,
+            'trigger_retrain': bool(trigger_retrain),
             'status': 'TRIGGER_RETRAIN_ORANGE' if trigger_retrain else 'STABLE_GREEN'
         }
 
