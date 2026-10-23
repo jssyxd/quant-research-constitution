@@ -1,0 +1,50 @@
+[{"stream_name":"stdout","time":2.748244607,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":2.748299961,"data":"🚀 [Kaggle Cloud Trainer] 启动真实 AlphaEvolve 遗传规划演化训练任务\n"}
+,{"stream_name":"stdout","time":2.748307154,"data":"执行时刻: 2026-10-23 05:04:57 UTC\n"}
+,{"stream_name":"stdout","time":2.748311466,"data":"Python 版本: 3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]\n"}
+,{"stream_name":"stdout","time":2.748315592,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":2.748319436,"data":"\u003e\u003e\u003e [1/4] 正在从 OKX 公共接口抓取 ETH-USDT-SWAP 真实 15m K线行情...\n"}
+,{"stream_name":"stdout","time":23.068543572,"data":"✔ 真实行情加载完毕，总根数: 2600 根 15m K线\n"}
+,{"stream_name":"stdout","time":23.069157229,"data":"\u003e\u003e\u003e [2/4] 计算微观特征矩阵与阻尼保护...\n"}
+,{"stream_name":"stdout","time":23.077862773,"data":"✔ 特征矩阵准备就绪: IMB (min=-1.00, max=1.00), BO (min=-0.50, max=0.50)\n"}
+,{"stream_name":"stdout","time":23.077881065,"data":"\u003e\u003e\u003e [3/4] 启动 30 世代云端遗传演化主循环...\n"}
+,{"stream_name":"stdout","time":23.284954937,"data":"  Generation 01/25 | Best Fit: 8.73 | Return: +6.51% | MaxDD: 2.33% | WinRate: 81.8% | Trades: 22\n"}
+,{"stream_name":"stdout","time":23.520894818,"data":"  Generation 02/25 | Best Fit: 10.71 | Return: +8.29% | MaxDD: 2.14% | WinRate: 80.0% | Trades: 35\n"}
+,{"stream_name":"stdout","time":23.733648965,"data":"  Generation 03/25 | Best Fit: 10.71 | Return: +8.29% | MaxDD: 2.14% | WinRate: 80.0% | Trades: 35\n"}
+,{"stream_name":"stdout","time":23.937324974,"data":"  Generation 04/25 | Best Fit: 11.40 | Return: +8.76% | MaxDD: 2.13% | WinRate: 82.4% | Trades: 34\n"}
+,{"stream_name":"stdout","time":24.14613005,"data":"  Generation 05/25 | Best Fit: 12.16 | Return: +9.12% | MaxDD: 2.01% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":24.350649151,"data":"  Generation 06/25 | Best Fit: 12.16 | Return: +9.12% | MaxDD: 2.01% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":24.55266235,"data":"  Generation 07/25 | Best Fit: 12.16 | Return: +9.12% | MaxDD: 2.01% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":24.754431149,"data":"  Generation 08/25 | Best Fit: 12.16 | Return: +9.12% | MaxDD: 2.01% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":24.952965792,"data":"  Generation 09/25 | Best Fit: 12.33 | Return: +9.26% | MaxDD: 2.00% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":25.150838128,"data":"  Generation 10/25 | Best Fit: 12.33 | Return: +9.26% | MaxDD: 2.00% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":25.350242755,"data":"  Generation 11/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":25.548398914,"data":"  Generation 12/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":25.750652319,"data":"  Generation 13/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":25.962182132,"data":"  Generation 14/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":26.18087058,"data":"  Generation 15/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":26.392662733,"data":"  Generation 16/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":26.59462385,"data":"  Generation 17/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":26.792559029,"data":"  Generation 18/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":26.99137372,"data":"  Generation 19/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":27.200827757,"data":"  Generation 20/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":27.410799832,"data":"  Generation 21/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":27.622182989,"data":"  Generation 22/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":27.824088438,"data":"  Generation 23/25 | Best Fit: 12.55 | Return: +9.45% | MaxDD: 1.99% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":28.024978268,"data":"  Generation 24/25 | Best Fit: 13.13 | Return: +9.83% | MaxDD: 1.95% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":28.227798106,"data":"  Generation 25/25 | Best Fit: 13.13 | Return: +9.83% | MaxDD: 1.95% | WinRate: 81.2% | Trades: 32\n"}
+,{"stream_name":"stdout","time":28.228347081,"data":"\n"}
+,{"stream_name":"stdout","time":28.22836371,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":28.228367996,"data":"🏆 【Kaggle 演化训练成功收敛】\n"}
+,{"stream_name":"stdout","time":28.228372358,"data":"最优染色体基因: [0.8717, 2.0038, 1.3724, 0.3219, 1.3454, 1.6703, 0.00063, 0.0236]\n"}
+,{"stream_name":"stdout","time":28.228376043,"data":"最终表现: 适应度=13.13 | 净收益率=+9.83% | 最大回撤=1.95% | 胜率=81.2%\n"}
+,{"stream_name":"stdout","time":28.228380051,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":28.229207733,"data":"✔ 真实 Checkpoint 已序列化输出为: kaggle_evolved_checkpoint.json\n"}
+,{"stream_name":"stdout","time":28.229221276,"data":"=== KAGGLE TRAINING COMPLETE ===\n"}
+,{"stream_name":"stderr","time":30.719139526,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":30.719168038,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":31.134539686,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":31.134569874,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":33.081829935,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":34.210365481,"data":"[NbConvertApp] Writing 338343 bytes to __results__.html\n"}
+]

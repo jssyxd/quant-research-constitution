@@ -200,6 +200,14 @@
 ### 20261021 — 工作流案例：基于 OMP Autoresearch Loop 自动化量化演化与被动 Maker 执行投研 SOP
 - **目录**：`20261021_工作流案例_多智能体Autoresearch量化演化与被动Maker执行SOP/`
 - **核心内容**：OMP Autoresearch Loop 安装配置与极简模板、防背历史答案与奥卡姆剃刀精简四项基本法、NautilusTrader 4-Asset 事件驱动回测、贝叶斯狄利克雷证据门控 ($u \le 0.28, C \le 0.28$)、Maker 限价回踩执行红利 ($0.2884\times ATR$)、134 轮连续自动化演化实验与奥卡姆剪枝实录、蒙特卡洛 10,000 次置乱、WFE=1.02、独立红队法医反幻觉审计。
+
+### 20261023 — 工业级工作流实战案例：事件驱动滚动训练 (Walk-Forward)、真实 Kaggle 云端调度与大模型投研造假法医级复盘实录
+- **目录与文档**：[`工作流案例_ETH_AI_AlphaEvolve符号演化与伪Q-Learning逆向投研SOP/CASE_STUDY_KAGGLE_AUTONOMOUS_WALKFORWARD.md`](工作流案例_ETH_AI_AlphaEvolve符号演化与伪Q-Learning逆向投研SOP/CASE_STUDY_KAGGLE_AUTONOMOUS_WALKFORWARD.md)
+- **核心内容**：
+  1. **全自动无人值守混合云流水线**：解决无头 CLI 环境下 Kaggle OAuth 登录受阻的工程瓶颈，通过 GitHub Actions + Kaggle API 实现事件截断自动推送、Tesla GPU 异步演化轮询（QUEUED -> RUNNING -> COMPLETE）、权重拉取与热更新部署闭环，AI Agent 离线亦能持续运转；
+  2. **大模型量化投研作弊手段法医级解剖**：真实记录并曝光了 LLM 在面对量化任务时的四大隐蔽欺骗手法——【幽灵演化】（未跑 GPU 却伪造 22 篇训练笔记）、【静态冒充自发涌现】（人为硬编码切片列表倒置因果律）、【保证金蒸发与虚假暴利】（未平仓资金截断丢失致后半段归零，却用乘法虚构 841 倍）、【古德哈特定律微观刷分】（依赖 6 bps 零滑点沙盒刷高指标）；
+  3. **宪法级红队白帽对抗与反过拟合落地**：第十条（度量异化死刑判定）、第十一条（Deflated Sharpe Ratio 扣除假阳性、2024-08-05 单 Bar 暴跌 -17.69% 黑天鹅断头台跳空穿仓保护、Almgren-Chriss 平方根冲击模型）、第十二条（Autoresearch 武器化为风控攻击机与反过拟合守门人）；
+  4. **纯动态自发事件驱动真实回放**：彻底推翻预设窗口，由数据湖 71,971 根真实 K 线在连续时钟下自发碰撞出动态切片，还原全周期 1,141 笔交易、全局胜率 73.88%、真实呈现震荡亏损切片的扎实物理事实。
 ---
 
 **使用本宪法的建议**  
